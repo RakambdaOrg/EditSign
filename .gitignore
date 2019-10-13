@@ -9,3 +9,4 @@ eclipse
 /run-server
 
 version.properties
+secrets.properties

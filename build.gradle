@@ -10,11 +10,21 @@ buildscript {
 }
 
 plugins {
-
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id "com.github.breadmoirai.github-release" version "2.2.9"
+    id 'com.novoda.build-properties' version '0.4.1'
 }
 
+buildProperties {
+    secrets {
+        using project.file('secrets.properties')
+    }
+}
+
+apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
+apply plugin: "com.github.breadmoirai.github-release"
 
 repositories {
     flatDir {
@@ -50,14 +60,23 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             workingDirectory project.file('run-client')
-            source sourceSets.main
+
+            mods {
+                edit_sign {
+                    source sourceSets.main
+                }
+            }
         }
 
         server {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             workingDirectory project.file('run-server')
-            source sourceSets.main
+            mods {
+                edit_sign {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
@@ -95,6 +114,37 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     appendix = "${project.mc_version}"
     classifier = 'javadoc'
     from javadoc.getDestinationDir()
+}
+
+curseforge {
+    apiKey = buildProperties.secrets['curseforge_api_key'].string
+    project {
+        id = "${project.curseforge_project_id}"
+        changelogType = 'markdown'
+        addGameVersion "${project.mc_version}"
+        changelog = getAllChangeLog()
+        releaseType = 'release'
+        mainArtifact jar
+        relations {
+        }
+    }
+    options {
+        debug = false
+        javaVersionAutoDetect = false
+    }
+}
+
+githubRelease {
+    owner = "RakSrinaNa"
+    repo = 'EditSign'
+    token = buildProperties.secrets['github_token'].string
+    tagName = getVersion()
+    releaseName = getVersion()
+    targetCommitish = "${project.mc_version}"
+    body {
+        getLatestChangeLog()
+    }
+    releaseAssets = files(jar.archivePath)
 }
 
 artifacts {
@@ -245,6 +295,48 @@ def writeUpdateJson() {
 
     println(json)
     file.write(JsonOutput.prettyPrint(JsonOutput.toJson(json)))
+}
+
+String getAllChangeLog() {
+    final old_log = file("CHANGELOG.md")
+    final header_file = file("header.md")
+
+    def all_log = old_log.exists() ? old_log.text : "No change log provided."
+    def header = header_file.exists() ? header_file.text : "#Change Log"
+    return header + System.lineSeparator() + all_log
+}
+
+String getLatestChangeLog() {
+    final def log_file = file("changes.md")
+    final def header_file = file("header.md")
+    def log = log_file.exists() ? log_file.text : "No change log provided."
+    def header = header_file.exists() ? header_file.text : "#Change Log"
+    return header + System.lineSeparator() + log
+}
+
+task makeChangeLog() {
+    doLast {
+        moveOldLog()
+
+        ProcessBuilder commiter = new ProcessBuilder("git", "commit", "-m", "v${project.version}")
+        def process1 = commiter.start()
+        process1.waitFor(10L, TimeUnit.SECONDS)
+        ProcessBuilder pusher = new ProcessBuilder("git", "push")
+        def process2 = pusher.start()
+        process2.waitFor(20L, TimeUnit.SECONDS)
+    }
+}
+
+void moveOldLog() {
+    def new_log_file = file("changes.md")
+    def old_log_file = file("CHANGELOG.md")
+
+    if (new_log_file.exists()) {
+        if (!old_log_file.exists())
+            old_log_file.createNewFile()
+        def combined = new_log_file.text + System.lineSeparator() + old_log_file.text
+        old_log_file.setText(combined)
+    }
 }
 
 task createUpdateJson {
