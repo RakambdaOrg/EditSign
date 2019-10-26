@@ -130,8 +130,6 @@ curseforge {
         mainArtifact(jar){
             displayName = "${project.archivesBaseName}-${project.mc_version}-${project.version}"
         }
-        relations {
-        }
     }
     options {
         debug = false
