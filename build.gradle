@@ -136,7 +136,7 @@ curseforge {
 
 githubRelease {
     owner = "RakSrinaNa"
-    repo = 'EditSign'
+    repo = project.repoName
     token = buildProperties.secrets['github_token'].string
     tagName = getVersion()
     releaseName = getVersion()
