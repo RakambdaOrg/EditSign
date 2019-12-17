@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[29,)"
+loaderVersion="[30,)"
 issueTrackerURL="https://github.com/RakSrinaNa/EditSign/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
@@ -16,12 +16,12 @@ authors="RakSrinaNa"
 [[dependencies.edit_sign]]
     modId="forge"
     mandatory=true
-    versionRange="[29.0.0,)"
+    versionRange="[30.0.0,)"
     ordering="NONE"
 	side="BOTH"
 [[dependencies.edit_sign]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15]"
+    versionRange="[1.15.1]"
     ordering="NONE"
     side="BOTH"
