@@ -21,15 +21,14 @@ import org.apache.logging.log4j.Logger;
 @Mod.EventBusSubscriber(modid = EditSign.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ForgeEventSubscriber{
 	public static final Logger LOGGER = LogManager.getLogger(EditSign.MOD_NAME);
-	
 	private static final String[] IS_EDITABLE_FIELDS = {
 			"field_145916_j",
 			"isEditable",
-	};
+			};
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-		if(event.getPlayer().isSneaking() && !isHoldingEditor(event.getPlayer())){
+		if(event.getPlayer().func_225608_bj_() && !isHoldingEditor(event.getPlayer())){
 			BlockPos pos = event.getPos();
 			BlockState state = event.getWorld().getBlockState(pos);
 			if(state.getBlock() instanceof StandingSignBlock || state.getBlock() instanceof WallSignBlock){
@@ -41,7 +40,8 @@ public final class ForgeEventSubscriber{
 					if(sign.getIsEditable()){
 						sign.setPlayer(player);
 						player.openSignEditor(sign);
-					}else{
+					}
+					else{
 						player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"));
 					}
 				}

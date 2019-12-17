@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="[29,)"
 issueTrackerURL="https://github.com/RakSrinaNa/EditSign/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
@@ -10,18 +10,18 @@ authors="RakSrinaNa"
 	modId="edit_sign"
 	version="${file.jarVersion}"
 	displayName="Edit Sign"
-	updateJSONURL="https://raw.githubusercontent.com/RakSrinaNa/EditSign/1.14.4/update.json"
+	updateJSONURL="https://raw.githubusercontent.com/RakSrinaNa/EditSign/1.15/update.json"
 	description='''Allow you to edit signs without breaking them.'''
 
 [[dependencies.edit_sign]]
     modId="forge"
     mandatory=true
-    versionRange="[28.1.26,)"
+    versionRange="[29.0.0,)"
     ordering="NONE"
 	side="BOTH"
 [[dependencies.edit_sign]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15]"
     ordering="NONE"
     side="BOTH"
