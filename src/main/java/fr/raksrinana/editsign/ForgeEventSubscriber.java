@@ -28,7 +28,7 @@ public final class ForgeEventSubscriber{
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-		if(event.getPlayer().func_225608_bj_() && !isHoldingEditor(event.getPlayer())){
+		if(event.getPlayer().isCrouching() && !isHoldingEditor(event.getPlayer())){
 			BlockPos pos = event.getPos();
 			BlockState state = event.getWorld().getBlockState(pos);
 			if(state.getBlock() instanceof StandingSignBlock || state.getBlock() instanceof WallSignBlock){
