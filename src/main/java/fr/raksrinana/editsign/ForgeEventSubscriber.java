@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber(modid = EditSign.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ForgeEventSubscriber{
-	public static final Logger LOGGER = LogManager.getLogger(EditSign.MOD_NAME);
 	private static final String[] IS_EDITABLE_FIELDS = {
 			"field_145916_j",
 			"isEditable",
@@ -56,10 +55,10 @@ public final class ForgeEventSubscriber{
 				return;
 			}
 			catch(ObfuscationReflectionHelper.UnableToFindFieldException e){
-				LOGGER.debug("Failed to get field {}", field);
+				EditSign.LOGGER.debug("Failed to get field {}", field);
 			}
 		}
-		LOGGER.debug("Couldn't set sign editable");
+		EditSign.LOGGER.debug("Couldn't set sign editable");
 	}
 	
 	private static boolean isHoldingEditor(PlayerEntity player){
