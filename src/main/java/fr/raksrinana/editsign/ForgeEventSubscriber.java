@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SignItem;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -41,7 +42,7 @@ public final class ForgeEventSubscriber{
 						player.openSignEditor(sign);
 					}
 					else{
-						player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"));
+						player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"), Util.field_240973_b_);
 					}
 				}
 			}
