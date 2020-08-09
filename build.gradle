@@ -36,7 +36,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
-        expand "mod_id": project.mod_id, "version": project.version, "vcsUrl": project.vcsUrl
+        expand "mod_id": project.mod_id, "version": project.version, "minecraft_version": project.minecraft_version
     }
 
     from(sourceSets.main.resources.srcDirs) {
