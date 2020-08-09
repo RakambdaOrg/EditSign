@@ -1,1 +1,1 @@
-- Port to 1.16.1
+- Change how the mod is activated. Now right-clicking the sign will edit it. Sneak to not edit it.
