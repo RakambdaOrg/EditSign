@@ -1,9 +1,12 @@
-name: Build
+name: Curse deploy
 
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
-  build:
+  curse:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -33,3 +36,9 @@ jobs:
         env:
           GITHUB_USER: RakSrinaNa
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push on CurseForge
+        run: ./gradlew curseforge
+        env:
+          GITHUB_USER: RakSrinaNa
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
