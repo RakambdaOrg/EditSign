@@ -11,8 +11,8 @@ apply plugin: "com.github.breadmoirai.github-release"
 buildProperties {
     secrets {
         using(file('secrets.properties')).or(System.getenv()).or([
-                "curseforge_api_key": "N/A",
-                "github_token"      : "N/A"
+                "CURSEGORGE_API_KEY": "N/A",
+                "GITHUB_TOKEN"      : "N/A"
         ])
     }
 }
@@ -36,7 +36,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
-        expand "mod_id": project.mod_id, "version": project.version
+        expand "mod_id": project.mod_id, "version": project.version, "vcsUrl": project.vcsUrl
     }
 
     from(sourceSets.main.resources.srcDirs) {
@@ -76,18 +76,26 @@ publishing {
 }
 
 curseforge {
-    apiKey = buildProperties.secrets['curseforge_api_key'].string
+    apiKey = buildProperties.secrets['CURSEGORGE_API_KEY'].string
     project {
         id = "${project.curseforge_project_id}"
         changelogType = 'markdown'
-        addGameVersion "${project.minecraft_version}"
+        addGameVersion project.minecraft_version
+        addGameVersion project.loader
         changelog = getLatestChangeLog()
         releaseType = "${project.curseforge_release_type}"
-        mainArtifact(jar) {
+        mainArtifact(remapJar) {
             displayName = "${archivesBaseName}-${project.version}"
+        }
+        afterEvaluate {
+            uploadTask.dependsOn('remapJar')
+        }
+        relations {
+            optionalDependency 'fabric-api'
         }
     }
     options {
+        forgeGradleIntegration = false
         javaVersionAutoDetect = false
     }
 }
@@ -95,7 +103,7 @@ curseforge {
 githubRelease {
     owner = "RakSrinaNa"
     repo = project.repoName
-    token = buildProperties.secrets['github_token'].string
+    token = buildProperties.secrets['GITHUB_TOKEN'].string
     tagName = "${archivesBaseName}-${project.version}"
     releaseName = "${archivesBaseName}-${project.version}"
     targetCommitish = "${project.minecraft_version}-fabric"
