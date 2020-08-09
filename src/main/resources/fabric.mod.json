@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "${mod_id}",
   "version": "${version}",
-
   "name": "Edit Sign",
   "description": "Allow you to edit signs without breaking them.",
   "authors": [
@@ -12,10 +11,8 @@
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/edit-sign",
     "sources": "https://github.com/RakSrinaNa/EditSign"
   },
-
   "license": "GPL-3.0 License",
   "icon": "assets/edit_sign/logo.png",
-
   "environment": "client",
   "entrypoints": {
     "client": [
