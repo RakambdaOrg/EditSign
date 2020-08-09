@@ -11,7 +11,7 @@ apply plugin: "com.github.breadmoirai.github-release"
 buildProperties {
     secrets {
         using(file('secrets.properties')).or(System.getenv()).or([
-                "CURSEGORGE_API_KEY": "N/A",
+                "CURSEFORGE_API_KEY": "N/A",
                 "GITHUB_TOKEN"      : "N/A"
         ])
     }
@@ -76,7 +76,7 @@ publishing {
 }
 
 curseforge {
-    apiKey = buildProperties.secrets['CURSEGORGE_API_KEY'].string
+    apiKey = buildProperties.secrets['CURSEFORGE_API_KEY'].string
     project {
         id = "${project.curseforge_project_id}"
         changelogType = 'markdown'
