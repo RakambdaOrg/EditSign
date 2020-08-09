@@ -5,6 +5,7 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
 # credits=""
 authors="RakSrinaNa"
+license = "GPL-3.0"
 
 [[mods]] #mandatory
 	modId="edit_sign"

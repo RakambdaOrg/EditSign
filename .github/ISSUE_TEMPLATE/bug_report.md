@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: ''
+assignees: 'RakSrinaNa'
 
 ---
 
@@ -18,3 +18,4 @@ Steps to reproduce the behavior:
 **Infos:**
  - Minecraft verson: [e.g. 1.14.4]
  - Mod version: [e.g. 1.0.0]
+ - Moad loader: [Forge, Fabric]
