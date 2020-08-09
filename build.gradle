@@ -11,8 +11,8 @@ apply plugin: "com.github.breadmoirai.github-release"
 buildProperties {
     secrets {
         using(file('secrets.properties')).or(System.getenv()).or([
-                "curseforge_api_key": "N/A",
-                "github_token"      : "N/A"
+                "CURSEGORGE_API_KEY": "N/A",
+                "GITHUB_TOKEN"      : "N/A"
         ])
     }
 }
@@ -76,7 +76,7 @@ publishing {
 }
 
 curseforge {
-    apiKey = buildProperties.secrets['curseforge_api_key'].string
+    apiKey = buildProperties.secrets['CURSEFORGE_API_KEY'].string
     project {
         id = "${project.curseforge_project_id}"
         changelogType = 'markdown'
@@ -95,7 +95,7 @@ curseforge {
 githubRelease {
     owner = "RakSrinaNa"
     repo = project.repoName
-    token = buildProperties.secrets['github_token'].string
+    token = buildProperties.secrets['GITHUB_TOKEN'].string
     tagName = "${archivesBaseName}-${project.version}"
     releaseName = "${archivesBaseName}-${project.version}"
     targetCommitish = "${project.minecraft_version}-fabric"
