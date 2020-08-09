@@ -99,7 +99,7 @@ githubRelease {
     token = buildProperties.secrets['github_token'].string
     tagName = "${project.loader}-${project.mc_version}-${project.version}"
     releaseName = "${project.loader}-${project.mc_version}-${project.version}"
-    targetCommitish = "${project.mc_version}"
+    targetCommitish = "${project.mc_version}-fabric"
     body {
         return getLatestChangeLog()
     }
