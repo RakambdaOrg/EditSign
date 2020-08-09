@@ -80,14 +80,23 @@ curseforge {
     project {
         id = "${project.curseforge_project_id}"
         changelogType = 'markdown'
-        addGameVersion "${project.minecraft_version}"
+        addGameVersion project.minecraft_version
+        addGameVersion project.loader
         changelog = getLatestChangeLog()
         releaseType = "${project.curseforge_release_type}"
-        mainArtifact(jar) {
+        mainArtifact(remapJar) {
             displayName = "${archivesBaseName}-${project.version}"
         }
+        afterEvaluate {
+            uploadTask.dependsOn('remapJar')
+        }
+        relations {
+            optionalDependency 'fabric-api'
+        }
+
     }
     options {
+        forgeGradleIntegration = false
         javaVersionAutoDetect = false
     }
 }
