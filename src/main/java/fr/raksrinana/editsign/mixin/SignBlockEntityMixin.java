@@ -24,7 +24,7 @@ public final class SignBlockEntityMixin{
 	@Inject(method = "onActivate", at = @At("HEAD"))
 	public void useOnBlock(PlayerEntity player, CallbackInfoReturnable<Boolean> callback){
 		SignBlockEntity sign = (SignBlockEntity) (Object) this;
-		if(!player.isSneaking() && !isHoldingEditor(player)){
+		if(player.isSneaking() && !isHoldingEditor(player)){
 			sign.setEditable(true);
 			if(sign.isEditable()){
 				player.openEditSignScreen(sign);
