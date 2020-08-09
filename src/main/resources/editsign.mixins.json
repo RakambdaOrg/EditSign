@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "fr.raksrinana.editsign.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "SignBlockEntityMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
