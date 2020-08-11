@@ -7,7 +7,6 @@
     "SignBlockEntityMixin"
   ],
   "client": [
-    "SignEditScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

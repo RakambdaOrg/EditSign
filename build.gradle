@@ -147,7 +147,7 @@ void moveOldLog() {
             old_log_file.createNewFile()
         def dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         def currDate = LocalDate.now()
-        def combined = "## [${project.mc_version}-${version}] - " + currDate.format(dateFormat) + System.lineSeparator() + new_log_file.text.trim() + System.lineSeparator() + System.lineSeparator() + old_log_file.text
+        def combined = "## [${project.loader}-${project.minecraft_version}-${version}] - " + currDate.format(dateFormat) + System.lineSeparator() + new_log_file.text.trim() + System.lineSeparator() + System.lineSeparator() + old_log_file.text
         old_log_file.setText(combined)
     }
 }
