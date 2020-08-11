@@ -91,7 +91,7 @@ curseforge {
             uploadTask.dependsOn('remapJar')
         }
         relations {
-            optionalDependency 'fabric-api'
+            requiredDependency 'fabric-api'
         }
     }
     options {
