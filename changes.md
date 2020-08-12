@@ -1,1 +1,1 @@
-- Update to 1.16.2
+* Only edit sign in survival or creative (#6)
