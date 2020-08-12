@@ -15,9 +15,8 @@
   "icon": "assets/edit_sign/logo.png",
   "environment": "client",
   "entrypoints": {
-    "client": [
-      "fr.raksrinana.editsign.EditSign"
-    ]
+    "client": [],
+    "server": []
   },
   "mixins": [
     "editsign.mixins.json"

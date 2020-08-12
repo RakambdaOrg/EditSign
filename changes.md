@@ -1,1 +1,1 @@
-- Backport to 1.15.2 fabric
+* Only edit sign in survival or creative (#6)
