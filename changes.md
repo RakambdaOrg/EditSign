@@ -1,1 +1,1 @@
-- Change how the mod is activated. Now right-clicking the sign will edit it. Sneak to not edit it.
+* Only edit sign in survival or creative (#6)
