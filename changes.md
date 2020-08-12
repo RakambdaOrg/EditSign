@@ -1,1 +1,1 @@
-- Initial fabric release
+* Only edit sign in survival or creative (#6)
