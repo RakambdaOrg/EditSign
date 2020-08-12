@@ -12,7 +12,7 @@ import java.util.Optional;
 public class EditSign{
 	public static final String MOD_ID = "edit_sign";
 	public static final String MOD_NAME = "Edit Sign";
-	public static final String VERSION = "2.0.0";
+	public static final String VERSION = "2.1.0";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	
 	public EditSign(){

@@ -1,8 +1,5 @@
 package fr.raksrinana.editsign;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.StandingSignBlock;
-import net.minecraft.block.WallSignBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -27,26 +24,21 @@ public final class ForgeEventSubscriber{
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-		if(event.getPlayer().isCrouching() && !isHoldingEditor(event.getPlayer())){
-			BlockPos pos = event.getPos();
-			BlockState state = event.getWorld().getBlockState(pos);
-			if(state.getBlock() instanceof StandingSignBlock || state.getBlock() instanceof WallSignBlock){
-				PlayerEntity player = event.getPlayer();
-				if(player instanceof ServerPlayerEntity){
-					ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-					GameType gameMode = serverPlayerEntity.interactionManager.getGameType();
-					if(gameMode == GameType.SURVIVAL || gameMode == GameType.CREATIVE){
-						TileEntity tileentity = event.getWorld().getTileEntity(pos);
-						if(tileentity instanceof SignTileEntity){
-							SignTileEntity sign = (SignTileEntity) tileentity;
-							setSignEditable(sign);
-							if(sign.getIsEditable()){
-								player.openSignEditor(sign);
-							}
-							else{
-								player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"));
-							}
-						}
+		BlockPos pos = event.getPos();
+		TileEntity tileentity = event.getWorld().getTileEntity(pos);
+		if(tileentity instanceof SignTileEntity){
+			PlayerEntity player = event.getPlayer();
+			if(!player.isCrouching() && player instanceof ServerPlayerEntity){
+				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+				GameType gameMode = serverPlayerEntity.interactionManager.getGameType();
+				if(gameMode == GameType.SURVIVAL || gameMode == GameType.CREATIVE){
+					SignTileEntity sign = (SignTileEntity) tileentity;
+					setSignEditable(sign);
+					if(sign.getIsEditable()){
+						player.openSignEditor(sign);
+					}
+					else{
+						player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"));
 					}
 				}
 			}
