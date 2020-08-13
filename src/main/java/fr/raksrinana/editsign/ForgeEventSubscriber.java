@@ -1,14 +1,9 @@
 package fr.raksrinana.editsign;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SignItem;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.GameType;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,14 +19,11 @@ public final class ForgeEventSubscriber{
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-		BlockPos pos = event.getPos();
-		TileEntity tileentity = event.getWorld().getTileEntity(pos);
-		if(tileentity instanceof SignTileEntity){
-			PlayerEntity player = event.getPlayer();
-			if(!player.isCrouching() && player instanceof ServerPlayerEntity){
-				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-				GameType gameMode = serverPlayerEntity.interactionManager.getGameType();
-				if(gameMode == GameType.SURVIVAL || gameMode == GameType.CREATIVE){
+		PlayerEntity player = event.getPlayer();
+		if(player.abilities.allowEdit){
+			if(!player.isCrouching()){
+				TileEntity tileentity = event.getWorld().getTileEntity(event.getPos());
+				if(tileentity instanceof SignTileEntity){
 					SignTileEntity sign = (SignTileEntity) tileentity;
 					setSignEditable(sign);
 					if(sign.getIsEditable()){
@@ -56,14 +48,5 @@ public final class ForgeEventSubscriber{
 			}
 		}
 		EditSign.LOGGER.debug("Couldn't set sign editable");
-	}
-	
-	private static boolean isHoldingEditor(PlayerEntity player){
-		for(ItemStack stack : player.getHeldEquipment()){
-			if(stack.getItem() instanceof SignItem){
-				return true;
-			}
-		}
-		return false;
 	}
 }
