@@ -1,3 +1,6 @@
+## [Forge-1.16.2-2.1.1] - 2020-08-13
+* Update to 1.16.2
+
 ## [Forge-1.16.1-2.1.0] - 2020-08-12
 * Only edit sign in survival or creative (#6)
 

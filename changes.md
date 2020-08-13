@@ -1,1 +1,1 @@
-* Improve server compatibility
+* Update to 1.16.2

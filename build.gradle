@@ -80,6 +80,12 @@ minecraft {
     }
 }
 
+processResources {
+    filesMatching("**/mods.toml") {
+        expand project.properties
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 }
@@ -138,7 +144,7 @@ githubRelease {
     token = buildProperties.secrets['GITHUB_TOKEN'].string
     tagName = "${archivesBaseName}-${project.version}"
     releaseName = "${archivesBaseName}-${project.version}"
-    targetCommitish = "${project.minecraft_version}"
+    targetCommitish = "${project.minecraft_version}-${project.loader}"
     body {
         return getLatestChangeLog()
     }
@@ -169,6 +175,8 @@ def writeUpdateJson() {
     def slurper = new JsonSlurper()
     def file = new File('update.json')
     def json = slurper.parse(file)
+
+    json['changelog'] = project.changelogUrl
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
     if (!json[project.minecraft_version].containsKey(version.toString()))
