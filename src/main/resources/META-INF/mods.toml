@@ -8,9 +8,9 @@ authors="RakSrinaNa"
 license = "GPL-3.0"
 
 [[mods]] #mandatory
-	modId="edit_sign"
+	modId="${project.mod_id}"
 	version="${project.version}"
-	displayName="Edit Sign"
+    displayName="${project.modName}"
 	updateJSONURL="https://raw.githubusercontent.com/${project.repoUser}/${project.repoName}/${project.repoBranch}/update.json"
 	description='''Allow you to edit signs without breaking them.'''
 
