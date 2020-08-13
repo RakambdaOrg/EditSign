@@ -139,12 +139,12 @@ curseforge {
 }
 
 githubRelease {
-    owner = "RakSrinaNa"
+    owner = project.repoUser
     repo = project.repoName
     token = buildProperties.secrets['GITHUB_TOKEN'].string
     tagName = "${archivesBaseName}-${project.version}"
     releaseName = "${archivesBaseName}-${project.version}"
-    targetCommitish = "${project.minecraft_version}-${project.loader}"
+    targetCommitish = "${project.repoBranch}"
     body {
         return getLatestChangeLog()
     }
@@ -175,12 +175,13 @@ def writeUpdateJson() {
     def slurper = new JsonSlurper()
     def file = new File('update.json')
     def json = slurper.parse(file)
+    def changelogUrl = "https://github.com/${project.repoUser}/${project.repoName}/blob/${project.repoBranch}/CHANGELOG.md"
 
-    json['changelog'] = project.changelogUrl
+    json['changelog'] = changelogUrl
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
     if (!json[project.minecraft_version].containsKey(version.toString()))
-        json[project.minecraft_version][version.toString()] = project.changelogUrl
+        json[project.minecraft_version][version.toString()] = changelogUrl
     json[project.minecraft_version] = json[project.minecraft_version].sort([compare: { a, b -> b.compareTo(a) }] as Comparator)
     json['promos']["${project.minecraft_version}-latest"] = version
     json['promos']["${project.minecraft_version}-recommended"] = version
