@@ -20,18 +20,16 @@ public final class ForgeEventSubscriber{
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
 		PlayerEntity player = event.getPlayer();
-		if(player.abilities.allowEdit){
-			if(!player.isCrouching()){
-				TileEntity tileentity = event.getWorld().getTileEntity(event.getPos());
-				if(tileentity instanceof SignTileEntity){
-					SignTileEntity sign = (SignTileEntity) tileentity;
-					setSignEditable(sign);
-					if(sign.getIsEditable()){
-						player.openSignEditor(sign);
-					}
-					else{
-						player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"));
-					}
+		if(player.abilities.allowEdit && !player.isCrouching()){
+			TileEntity tileentity = event.getWorld().getTileEntity(event.getPos());
+			if(tileentity instanceof SignTileEntity){
+				SignTileEntity sign = (SignTileEntity) tileentity;
+				setSignEditable(sign);
+				if(sign.getIsEditable()){
+					player.openSignEditor(sign);
+				}
+				else{
+					player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"));
 				}
 			}
 		}
