@@ -1,1 +1,1 @@
-* Only edit sign in survival or creative (#6)
+* Improve server compatibility
