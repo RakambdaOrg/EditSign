@@ -1,3 +1,6 @@
+## [Forge-1.16.2-2.1.2] - 2020-08-14
+* Update pack format version
+
 ## [Forge-1.16.2-2.1.1] - 2020-08-13
 * Update to 1.16.2
 
