@@ -1,1 +1,1 @@
-* Load mod on servers (#7)
+* Add Turkish translations (@egeesin)

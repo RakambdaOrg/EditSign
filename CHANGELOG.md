@@ -1,3 +1,6 @@
+## [Fabric-1.16.2-2.1.3] - 2020-10-20
+* Add Turkish translations (@egeesin)
+
 ## [Fabric-1.16.2-2.1.0] - 2020-08-13
 * Load mod on servers (#7)
 
