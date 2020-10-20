@@ -1,1 +1,1 @@
-* Improve server compatibility
+* Add Turkish translations (@egeesin)

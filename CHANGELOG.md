@@ -1,3 +1,6 @@
+## [Forge-1.16.1-2.1.3] - 2020-10-20
+* Add Turkish translations (@egeesin)
+
 ## [Forge-1.16.1-2.1.0] - 2020-08-12
 * Only edit sign in survival or creative (#6)
 
