@@ -1,3 +1,6 @@
+## [Forge-1.16.2-2.1.3] - 2020-10-20
+* Add Turkish translations (@egeesin)
+
 ## [Forge-1.16.2-2.1.2] - 2020-08-14
 * Update pack format version
 

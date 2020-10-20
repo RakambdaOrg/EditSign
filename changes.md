@@ -1,1 +1,1 @@
-* Update pack format version
+* Add Turkish translations (@egeesin)
