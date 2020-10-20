@@ -1,3 +1,6 @@
+## [Fabric-1.16.3-2.1.3] - 2020-10-20
+* Add Turkish translations (@egeesin)
+
 ## [Fabric-1.16.3-2.1.1] - 2020-09-10
 * Port to 1.16.3
 
