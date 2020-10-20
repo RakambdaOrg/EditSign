@@ -1,3 +1,6 @@
+## [Forge-1.16.3-2.1.3] - 2020-10-20
+* Add Turkish translations (@egeesin)
+
 ## [Forge-1.16.3-2.1.2] - 2020-09-11
 * Port to 1.16.3
 

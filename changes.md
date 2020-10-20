@@ -1,1 +1,1 @@
-* Port to 1.16.3
+* Add Turkish translations (@egeesin)
