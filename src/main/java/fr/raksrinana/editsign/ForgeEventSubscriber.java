@@ -30,7 +30,7 @@ public final class ForgeEventSubscriber{
 					player.openSignEditor(sign);
 				}
 				else{
-					player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"), Util.field_240973_b_);
+					player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"), Util.DUMMY_UUID);
 				}
 			}
 		}
