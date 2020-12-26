@@ -1,1 +1,1 @@
-* Port to 1.16.4
+* Add German translations (#13 thanks X00LA)
