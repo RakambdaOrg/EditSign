@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import static fr.raksrinana.editsign.EditSignUtils.canPlayerEdit;
 
 @Mixin(SignBlockEntity.class)
 public final class SignBlockEntityMixin{
@@ -15,7 +16,7 @@ public final class SignBlockEntityMixin{
 	
 	@Inject(method = "onActivate", at = @At("HEAD"))
 	public void useOnBlock(PlayerEntity player, CallbackInfoReturnable<Boolean> callback){
-		if(player.abilities.allowModifyWorld){
+		if(canPlayerEdit(player)){
 			editable = true;
 			SignBlockEntity sign = (SignBlockEntity) (Object) this;
 			player.openEditSignScreen(sign);

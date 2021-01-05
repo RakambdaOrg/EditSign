@@ -1,12 +1,19 @@
+buildscript {
+    ext {
+        mod_menu_version = '1.14.6+build.31'
+        cloth_config_version = '4.8.2'
+        auto_config1u_version = '3.3.1'
+    }
+}
+
 plugins {
     id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id "com.github.breadmoirai.github-release" version "2.2.10"
     id 'com.novoda.build-properties' version '0.4.1'
+    id 'com.github.ben-manes.versions' version '0.36.0'
 }
-
-apply plugin: "com.github.breadmoirai.github-release"
 
 buildProperties {
     secrets {
@@ -23,12 +30,46 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = "${project.repoName}-${project.loader}-${project.minecraft_version}"
 
+repositories {
+    maven {
+        name = 'CurseForge'
+        url = 'https://minecraft.curseforge.com/api/maven'
+    }
+    maven {
+        name = 'Cloth Config'
+        url = 'https://dl.bintray.com/shedaniel/cloth-config-2'
+    }
+    maven {
+        name = 'Auto Config (updated fork)'
+        url = 'https://dl.bintray.com/shedaniel/autoconfig1u'
+    }
+    maven {
+        name = 'prospector-fabric'
+        url = 'https://maven.fabricmc.net/io/github/prospector/modmenu/'
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation("io.github.prospector:modmenu:${mod_menu_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
+    modImplementation("me.shedaniel.cloth:config-2:${cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+        exclude module: "modmenu"
+    }
+    include "me.shedaniel.cloth:config-2:${cloth_config_version}"
+
+    modImplementation("me.sargunvohra.mcmods:autoconfig1u:${auto_config1u_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    include "me.sargunvohra.mcmods:autoconfig1u:${auto_config1u_version}"
 }
 
 processResources {
@@ -92,6 +133,9 @@ curseforge {
         }
         relations {
             requiredDependency 'fabric-api'
+            embeddedLibrary 'auto-config-updated-api'
+            embeddedLibrary 'cloth-config'
+            optionalDependency 'modmenu'
         }
     }
     options {

@@ -1,1 +1,1 @@
-* Add German translations (#13 thanks X00LA)
+* Add configuration to require the player to hold a specific item to enable editing (#14)

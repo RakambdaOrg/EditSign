@@ -13,11 +13,17 @@
     "sources": "https://github.com/RakSrinaNa/EditSign"
   },
   "license": "GPL-3.0",
-  "icon": "assets/edit_sign/logo.png",
+  "icon": "assets/editsign/logo.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "fr.raksrinana.editsign.EditSign"
+    ],
     "client": [],
-    "server": []
+    "server": [],
+    "modmenu": [
+      "fr.raksrinana.editsign.ModMenuImpl"
+    ]
   },
   "mixins": [
     "editsign.mixins.json"
