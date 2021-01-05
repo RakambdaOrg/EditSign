@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import static fr.raksrinana.editsign.EditSignUtils.canPlayerEdit;
 
 @Mod.EventBusSubscriber(modid = EditSign.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ForgeEventSubscriber{
@@ -21,7 +22,7 @@ public final class ForgeEventSubscriber{
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
 		PlayerEntity player = event.getPlayer();
-		if(player.abilities.allowEdit && !player.isCrouching()){
+		if(canPlayerEdit(player, event.getItemStack()) && !player.isCrouching()){
 			TileEntity tileentity = event.getWorld().getTileEntity(event.getPos());
 			if(tileentity instanceof SignTileEntity){
 				SignTileEntity sign = (SignTileEntity) tileentity;
@@ -30,7 +31,7 @@ public final class ForgeEventSubscriber{
 					player.openSignEditor(sign);
 				}
 				else{
-					player.sendMessage(new TranslationTextComponent("edit_sign.action.not_editable"), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent(EditSign.MOD_ID + ".action.not_editable"), Util.DUMMY_UUID);
 				}
 			}
 		}

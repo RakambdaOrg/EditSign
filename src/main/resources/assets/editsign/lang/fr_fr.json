@@ -1,0 +1,9 @@
+{
+  "text.autoconfig.editsign.category.default": "Général",
+  "text.autoconfig.editsign.option.requiredItemId": "ID d'item requis",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[0]": "ID de l'item qie les utilisateurs",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[1]": "doivent avoir en main pour pouvoir",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[2]": "éditer un panneau. Si vide, n'importe",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[3]": "quel item fera l'affaire.",
+  "editsign.action.not_editable": "Ce panneau n'est pas éditable"
+}
