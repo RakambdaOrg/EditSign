@@ -5,5 +5,5 @@
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[1]": "doivent avoir en main pour pouvoir",
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[2]": "éditer un panneau. Si vide, n'importe",
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[3]": "quel item fera l'affaire.",
-  "edit_sign.action.not_editable": "Ce panneau n'est pas éditable"
+  "editsign.action.not_editable": "Ce panneau n'est pas éditable"
 }

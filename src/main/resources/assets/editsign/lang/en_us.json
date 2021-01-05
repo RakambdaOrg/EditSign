@@ -6,5 +6,5 @@
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[1]": "to be holding in order to edit",
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[2]": "a sign. If no value is set",
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[3]": "any item will be fine.",
-  "edit_sign.action.not_editable": "This sign isn't editable"
+  "editsign.action.not_editable": "This sign isn't editable"
 }
