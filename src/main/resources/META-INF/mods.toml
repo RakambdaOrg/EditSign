@@ -26,3 +26,8 @@ license = "GPL-3.0"
     versionRange="[${project.minecraft_version}]"
     ordering="NONE"
     side="BOTH"
+[[dependencies.edit_sign]]
+    modId="cloth-config"
+    mandatory=false
+    ordering="NONE"
+    side="CLIENT"

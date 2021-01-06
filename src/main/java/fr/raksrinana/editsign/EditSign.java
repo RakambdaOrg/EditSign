@@ -1,9 +1,9 @@
 package fr.raksrinana.editsign;
 
 import fr.raksrinana.editsign.config.Config;
-import me.shedaniel.clothconfig2.forge.api.ConfigBuilder;
-import net.minecraft.util.text.StringTextComponent;
+import fr.raksrinana.editsign.config.cloth.ClothConfigHook;
 import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -17,17 +17,16 @@ public class EditSign{
 	public static final String MOD_ID = "editsign";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	
-	public EditSign(){
+	public EditSign() throws ClassNotFoundException, IllegalAccessException, InstantiationException{
 		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
-		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (mc, parent) -> {
-			ConfigBuilder builder = ConfigBuilder.create()
-					.setParentScreen(parent)
-					.setTitle(new StringTextComponent("EditSign"));
-			
-			Config.COMMON.fillConfigScreen(builder);
-			
-			return builder.build();
-		});
+		
+		if(ModList.get().isLoaded("cloth-config"))
+		{
+			Class.forName("fr.raksrinana.editsign.config.cloth.ClothConfigHook")
+					.asSubclass(ClothConfigHook.class)
+					.newInstance()
+					.load();
+		}
 	}
 }
