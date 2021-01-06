@@ -1,3 +1,6 @@
+## [Fabric-1.16.4-2.2.0] - 2021-01-06
+* Add configuration to require the player to hold a specific item to enable editing (#14)
+
 ## [Fabric-1.16.4-2.1.4] - 2020-12-26
 * Add German translations (#13 thanks X00LA)
 
