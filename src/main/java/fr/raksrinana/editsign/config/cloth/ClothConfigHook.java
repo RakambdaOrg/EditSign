@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-@OnlyIn(Dist.CLIENT)
 public class ClothConfigHook{
 	private static final Pattern MINECRAFT_ID_PATTERN = Pattern.compile("#?[a-z0-9_.-]+:[a-z0-9/._-]+");
 	
@@ -51,6 +50,7 @@ public class ClothConfigHook{
 		});
 	}
 	
+	@OnlyIn(Dist.CLIENT)
 	public void fillConfigScreen(ConfigBuilder builder){
 		CommonConfig config = Config.COMMON;
 		
