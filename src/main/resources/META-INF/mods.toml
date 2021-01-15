@@ -11,7 +11,7 @@ license = "GPL-3.0"
 	modId="${project.mod_id}"
 	version="${project.version}"
     displayName="${project.modName}"
-	updateJSONURL="https://raw.githubusercontent.com/${project.repoUser}/${project.repoName}/${project.repoBranch}/update.json"
+	updateJSONURL="https://raw.githubusercontent.com/${project.repoUser}/${project.repoName}/${project.minecraft_version}-forge/update.json"
 	description='''Allow you to edit signs without breaking them.'''
 
 [[dependencies.edit_sign]]

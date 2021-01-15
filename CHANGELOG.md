@@ -1,3 +1,6 @@
+## [Forge-1.16.5-2.2.0] - 2021-01-15
+* Port to 1.16.5
+
 ## [Forge-1.16.4-2.2.0] - 2021-01-06
 * Add configuration to require the player to hold a specific item to enable editing (#14)
 
