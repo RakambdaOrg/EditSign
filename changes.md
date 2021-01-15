@@ -1,1 +1,1 @@
-* Add configuration to require the player to hold a specific item to enable editing (#14)
+* Port to 1.16.5
