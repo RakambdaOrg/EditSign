@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.APP_JAVA_VERSION }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2.1.4
         name: Restore gradle cache
         with:
           path: ~/.gradle/caches
@@ -24,7 +24,7 @@ jobs:
             ${{ runner.OS }}-gradle-${{ env.cache-name }}-
             ${{ runner.OS }}-gradle-
             ${{ runner.OS }}-
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2.1.4
         name: Cache gradle wrapper
         with:
           path: ~/.gradle/wrapper
@@ -48,7 +48,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.APP_JAVA_VERSION }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2.1.4
         name: Restore gradle cache
         with:
           path: ~/.gradle/caches
@@ -57,7 +57,7 @@ jobs:
             ${{ runner.OS }}-gradle-${{ env.cache-name }}-
             ${{ runner.OS }}-gradle-
             ${{ runner.OS }}-
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2.1.4
         name: Cache gradle wrapper
         with:
           path: ~/.gradle/wrapper
