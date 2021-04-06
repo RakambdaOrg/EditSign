@@ -14,6 +14,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: ${{ env.APP_JAVA_VERSION }}
       - uses: actions/cache@v2.1.4
         name: Restore gradle cache
@@ -47,6 +48,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: ${{ env.APP_JAVA_VERSION }}
       - uses: actions/cache@v2.1.4
         name: Restore gradle cache
