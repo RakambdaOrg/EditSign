@@ -1,1 +1,1 @@
-* Port to 1.16.5
+* Don't open GUI if holding dye when right clicking

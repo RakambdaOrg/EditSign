@@ -2,6 +2,7 @@ package fr.raksrinana.editsign;
 
 import fr.raksrinana.editsign.config.Config;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
@@ -19,14 +20,21 @@ import static net.minecraftforge.registries.ForgeRegistries.ITEMS;
 
 public class EditSignUtils{
 	public static boolean canPlayerEdit(PlayerEntity playerEntity, ItemStack itemStack){
+		return playerEntity.abilities.allowEdit && !playerEntity.isCrouching() && !isHoldingDye(itemStack) && hasRightItem(itemStack);
+	}
+	
+	private static boolean isHoldingDye(ItemStack itemStack){
+		return itemStack.getItem() instanceof DyeItem;
+	}
+	
+	private static boolean hasRightItem(ItemStack itemStack){
 		Collection<Item> requiredItem = Config.COMMON.getRequiredItem();
-		if(!requiredItem.isEmpty()){
-			Item playerItem = itemStack.getItem();
-			if(requiredItem.stream().noneMatch(item -> item.equals(playerItem))){
-				return false;
-			}
+		if(requiredItem.isEmpty()){
+			return true;
 		}
-		return playerEntity.abilities.allowEdit;
+		
+		Item playerItem = itemStack.getItem();
+		return requiredItem.stream().anyMatch(item -> item.equals(playerItem));
 	}
 	
 	public static Set<Item> getAsItems(String name){

@@ -22,7 +22,7 @@ public final class ForgeEventSubscriber{
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
 		PlayerEntity player = event.getPlayer();
-		if(canPlayerEdit(player, event.getItemStack()) && !player.isCrouching()){
+		if(canPlayerEdit(player, event.getItemStack())){
 			TileEntity tileentity = event.getWorld().getTileEntity(event.getPos());
 			if(tileentity instanceof SignTileEntity){
 				SignTileEntity sign = (SignTileEntity) tileentity;
