@@ -23,15 +23,15 @@ public final class ForgeEventSubscriber{
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
 		PlayerEntity player = event.getPlayer();
 		if(canPlayerEdit(player, event.getItemStack())){
-			TileEntity tileentity = event.getWorld().getTileEntity(event.getPos());
+			TileEntity tileentity = event.getWorld().getBlockEntity(event.getPos());
 			if(tileentity instanceof SignTileEntity){
 				SignTileEntity sign = (SignTileEntity) tileentity;
 				setSignEditable(sign);
-				if(sign.getIsEditable()){
-					player.openSignEditor(sign);
+				if(sign.isEditable()){
+					player.openTextEdit(sign);
 				}
 				else{
-					player.sendMessage(new TranslationTextComponent(EditSign.MOD_ID + ".action.not_editable"), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent(EditSign.MOD_ID + ".action.not_editable"), Util.NIL_UUID);
 				}
 			}
 		}

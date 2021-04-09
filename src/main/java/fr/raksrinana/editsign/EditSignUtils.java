@@ -20,7 +20,7 @@ import static net.minecraftforge.registries.ForgeRegistries.ITEMS;
 
 public class EditSignUtils{
 	public static boolean canPlayerEdit(PlayerEntity playerEntity, ItemStack itemStack){
-		return playerEntity.abilities.allowEdit && !playerEntity.isCrouching() && !isHoldingDye(itemStack) && hasRightItem(itemStack);
+		return playerEntity.mayBuild() && !playerEntity.isCrouching() && !isHoldingDye(itemStack) && hasRightItem(itemStack);
 	}
 	
 	private static boolean isHoldingDye(ItemStack itemStack){
@@ -55,8 +55,8 @@ public class EditSignUtils{
 			}
 			ResourceLocation resourceLocation = new ResourceLocation(name);
 			if(isTag){
-				return Optional.ofNullable(ItemTags.getCollection().get(resourceLocation))
-						.map(ITag::getAllElements)
+				return Optional.ofNullable(ItemTags.getAllTags().getTag(resourceLocation))
+						.map(ITag::getValues)
 						.map(Collection::stream)
 						.orElse(empty());
 			}
