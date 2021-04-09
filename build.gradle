@@ -10,28 +10,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 
 plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id "com.github.breadmoirai.github-release" version '2.2.10'
-    id 'com.novoda.build-properties' version '0.4.1'
-}
-
-buildProperties {
-    secrets {
-        using(file('secrets.properties')).or(System.getenv()).or([
-                "CURSEFORGE_API_KEY": "N/A",
-                "GITHUB_TOKEN"      : "N/A"
-        ])
-    }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
-apply plugin: "com.github.breadmoirai.github-release"
 
 repositories {
     maven {
@@ -55,8 +44,7 @@ javadoc {
     failOnError = false
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 archivesBaseName = "${project.repoName}-${project.loader}-${project.minecraft_version}"
 
@@ -89,11 +77,31 @@ minecraft {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 processResources {
     filesMatching("**/mods.toml") {
         expand project.properties
     }
 }
+
+jar.finalizedBy('reobfJar')
+
+import net.minecraftforge.gradle.common.task.SignJar
+task signJar(type: SignJar, dependsOn: jar) {
+    onlyIf {
+        project.hasProperty('forgeKeyStore')
+    }
+
+    keyStore = project.findProperty('forgeKeyStore')
+    alias = project.findProperty('forgeKeyStoreAlias')
+    storePass = project.findProperty('forgeKeyStorePass')
+    keyPass = project.findProperty('forgeKeyStoreKeyPass')
+    inputFile = jar.getArchiveFile()
+    outputFile = jar.getArchiveFile()
+}
+build.dependsOn signJar
+assemble.dependsOn signJar
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
@@ -132,7 +140,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 curseforge {
-    apiKey = buildProperties.secrets['CURSEFORGE_API_KEY'].string
+    apiKey = "${project.findProperty("curseforgeApiKey")}"
     project {
         id = "${project.curseforge_project_id}"
         changelogType = 'markdown'
@@ -153,15 +161,15 @@ curseforge {
 }
 
 githubRelease {
+    def tag = "${archivesBaseName}-${project.version}"
+
     owner = project.repoUser
-    repo = project.repoName
-    token = buildProperties.secrets['GITHUB_TOKEN'].string
-    tagName = "${archivesBaseName}-${project.version}"
-    releaseName = "${archivesBaseName}-${project.version}"
-    targetCommitish = "${project.minecraft_version}-forge"
-    body {
-        return getLatestChangeLog()
-    }
+    repo.set(project.repoName as String)
+    token("${project.findProperty("githubReleaseToken")}")
+    tagName.set(tag)
+    releaseName.set(tag)
+    targetCommitish.set("${project.minecraft_version}-forge")
+    body.set(getLatestChangeLog())
 }
 
 artifacts {
@@ -187,7 +195,7 @@ import java.time.format.DateTimeFormatter
 def writeUpdateJson() {
     def version = project.version
     def slurper = new JsonSlurper()
-    def file = new File('update.json')
+    def file = project.file('update.json')
     def json = slurper.parse(file)
     def changelogUrl = "https://github.com/${project.repoUser}/${project.repoName}/blob/${project.minecraft_version}-forge/CHANGELOG.md"
 
@@ -202,15 +210,6 @@ def writeUpdateJson() {
 
     println(json)
     file.write(JsonOutput.prettyPrint(JsonOutput.toJson(json)))
-}
-
-String getAllChangeLog() {
-    final old_log = file("CHANGELOG.md")
-    final header_file = file("header.md")
-
-    def all_log = old_log.exists() ? old_log.text : "No change log provided."
-    def header = header_file.exists() ? header_file.text : ""
-    return header + System.lineSeparator() + all_log
 }
 
 String getLatestChangeLog() {
