@@ -93,7 +93,7 @@ task publishModrinth(type: TaskModrinthUpload, group: "upload") {
     token = project.findProperty("modrinthToken") as String
     projectId = project.modrinth_project_id
     versionNumber = "${project.minecraft_version}-${project.version}"
-    versionName = "${project.minecraft_version}-${project.version}"
+    versionName = "${archivesBaseName}-${project.version}"
     uploadFile = jar
     addGameVersion(project.minecraft_version as String)
     addLoader("fabric")
@@ -103,11 +103,13 @@ task publishModrinth(type: TaskModrinthUpload, group: "upload") {
 }
 
 githubRelease {
+    def tag = "${project.minecraft_version}-${project.version}"
+
     owner = project.repoUser
     repo.set(project.repoName as String)
     token("${project.findProperty("githubReleaseToken")}")
-    tagName.set("${archivesBaseName}-${project.version}")
-    releaseName.set("${project.minecraft_version}-${project.version}")
+    tagName.set(tag)
+    releaseName.set(tag)
     targetCommitish.set("${project.minecraft_version}")
     body.set(project.changelog.getLatest().toText())
 }
