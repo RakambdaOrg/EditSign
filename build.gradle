@@ -1,125 +1,57 @@
 buildscript {
-    ext{
-        cloth_config_version = '4.1.1'
-        auto_config1u_version = '3.3.1'
-    }
-
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
     }
+
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath("com.google.guava:guava:30.1.1-jre")
+        classpath("commons-io:commons-io:2.8.0")
     }
 }
 
 plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id "com.github.breadmoirai.github-release" version '2.2.10'
+    id 'com.modrinth.minotaur' version '1.2.0'
+    id "com.github.breadmoirai.github-release" version '2.2.12'
+    id "com.github.ben-manes.versions" version "0.38.0"
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
+allprojects {
+    apply plugin: "java"
 
-repositories {
-    maven {
-        name = 'Cloth Config'
-        url = 'https://dl.bintray.com/shedaniel/cloth-config-2'
-    }
-    flatDir {
-        name "fileRepo"
-        dirs "repo"
-    }
-    mavenLocal()
-    jcenter()
-}
+    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.compilerArgs = ['-Xlint:deprecation']
-}
-
-javadoc {
-    failOnError = false
-}
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-
-archivesBaseName = "${project.repoName}-${project.loader}-${project.minecraft_version}"
-
-minecraft {
-    mappings channel: project.mcp_channel.toString(), version: project.mcp_mappings.toString()
-
-    runs {
-        client {
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            workingDirectory project.file('run-client')
-
-            mods {
-                edit_sign {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            workingDirectory project.file('run-server')
-            mods {
-                edit_sign {
-                    source sourceSets.main
-                }
-            }
-        }
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.compilerArgs = ['-Xlint:deprecation']
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+group = "fr.raksrinana"
+archivesBaseName = "${project.modName}-${project.minecraft_version}"
 
-processResources {
-    filesMatching("**/mods.toml") {
-        expand project.properties
-    }
-}
+task buildJar(type: Jar, group: "modding") {
+    dependsOn ":common:jar", ":fabric:build", ":forge:build"
+    finalizedBy ":forge:signJar"
 
-jar.finalizedBy('reobfJar')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from zipTree("common/build/libs/common-${project.version}.jar"),
+            zipTree("fabric/build/libs/fabric-${project.version}.jar"),
+            zipTree("forge/build/libs/forge-${project.version}.jar")
 
-import net.minecraftforge.gradle.common.task.SignJar
-task signJar(type: SignJar, dependsOn: jar) {
-    onlyIf {
-        project.hasProperty('forgeKeyStore')
-    }
-
-    keyStore = project.findProperty('forgeKeyStore')
-    alias = project.findProperty('forgeKeyStoreAlias')
-    storePass = project.findProperty('forgeKeyStorePass')
-    keyPass = project.findProperty('forgeKeyStoreKeyPass')
-    inputFile = jar.getArchiveFile()
-    outputFile = jar.getArchiveFile()
-}
-build.dependsOn signJar
-assemble.dependsOn signJar
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${project.forge_version}"
-
-    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"))
-}
-
-jar {
     manifest {
-        attributes(["Specification-Title"     : project.mod_id,
-                    "Specification-Vendor"    : "RakSrinaNa",
-                    "Specification-Version"   : "0.2",
-                    "Implementation-Title"    : project.modName,
-                    "Implementation-Version"  : project.version,
-                    "Implementation-Vendor"   : "RakSrinaNa",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+        attributes([
+                "Specification-Title"     : project.modId,
+                "Specification-Vendor"    : "RakSrinaNa",
+                "Specification-Version"   : project.version,
+                "Implementation-Title"    : project.modName,
+                "Implementation-Version"  : "${project.version}",
+                "Implementation-Vendor"   : "RakSrinaNa",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
 }
+assemble.finalizedBy("buildJar")
 
 curseforge {
     apiKey = "${project.findProperty("curseforgeApiKey")}"
@@ -127,19 +59,44 @@ curseforge {
         id = "${project.curseforge_project_id}"
         changelogType = 'markdown'
         addGameVersion project.minecraft_version
-        addGameVersion project.loader
-        changelog = getLatestChangeLog()
-        releaseType = "${project.curseforge_release_type}"
+        changelog = generateChangelog()
+        releaseType = "${project.releaseType}"
         mainArtifact(jar) {
             displayName = "${archivesBaseName}-${project.version}"
         }
         relations {
+            //Fabric
+            requiredDependency 'fabric-api'
+            optionalDependency 'modmenu'
+            embeddedLibrary 'cloth-config'
+
+            //Forge
             optionalDependency 'cloth-config-forge'
         }
     }
     options {
         javaVersionAutoDetect = false
+        javaIntegration = false
+        forgeGradleIntegration = false
     }
+}
+
+import com.modrinth.minotaur.TaskModrinthUpload
+import groovy.json.JsonOutput
+
+task publishModrinth(type: TaskModrinthUpload, group: "upload") {
+    dependsOn buildJar
+
+    token = project.findProperty("modrinthToken") as String
+    projectId = project.modrinth_project_id
+    versionNumber = "${project.minecraft_version}-${project.version}"
+    versionName = "${archivesBaseName}-${project.version}"
+    uploadFile = jar
+    addGameVersion(project.minecraft_version as String)
+    addLoader("fabric")
+    addLoader("forge")
+    versionType = project.releaseType.toLowerCase()
+    changelog = generateChangelog()
 }
 
 githubRelease {
@@ -150,24 +107,20 @@ githubRelease {
     token("${project.findProperty("githubReleaseToken")}")
     tagName.set(tag)
     releaseName.set(tag)
-    targetCommitish.set("${project.minecraft_version}-forge")
-    body.set(getLatestChangeLog())
+    targetCommitish.set("${project.minecraft_version}")
+    body.set(generateChangelog())
 }
 
 // Update JSON management
 
-import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 def writeUpdateJson() {
     def version = project.version
     def slurper = new JsonSlurper()
     def file = project.file('update.json')
     def json = slurper.parse(file)
-    def changelogUrl = "https://github.com/${project.repoUser}/${project.repoName}/blob/${project.minecraft_version}-forge/CHANGELOG.md"
+    def changelogUrl = "https://github.com/${project.repoUser}/${project.repoName}/blob/${project.minecraft_version}/CHANGELOG.md"
 
     json['changelog'] = changelogUrl
 
@@ -182,39 +135,37 @@ def writeUpdateJson() {
     file.write(JsonOutput.prettyPrint(JsonOutput.toJson(json)))
 }
 
-String getLatestChangeLog() {
-    final def log_file = file("changes.md")
-    final def header_file = file("header.md")
-    def log = log_file.exists() ? log_file.text : "No change log provided."
-    def header = header_file.exists() ? header_file.text : ""
-    return header + System.lineSeparator() + log
-}
-
-task makeChangeLog() {
-    doLast {
-        moveOldLog()
-    }
-}
-
-void moveOldLog() {
-    def new_log_file = file("changes.md")
-    def old_log_file = file("CHANGELOG.md")
-
-    if (new_log_file.exists()) {
-        if (!old_log_file.exists())
-            old_log_file.createNewFile()
-        def version = project.version
-        def dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        def currDate = LocalDate.now()
-        def combined = "## [${project.loader}-${project.minecraft_version}-${version}] - " + currDate.format(dateFormat) + System.lineSeparator() + new_log_file.text.trim() + System.lineSeparator() + System.lineSeparator() + old_log_file.text
-        old_log_file.setText(combined)
-    }
-}
-
-task createUpdateJson {
+task createUpdateJson(group: "modding") {
     doLast {
         println('Updating update.json...')
         writeUpdateJson()
     }
 }
 build.finalizedBy createUpdateJson
+
+static String generateChangelog() {
+    def lastTag = "git describe --tags --abbrev=0".execute().text.trim()
+    def beforeLastTag = "git describe --abbrev=0 --tags $lastTag^".execute().text.trim()
+    def gitLogCmd = "git log $beforeLastTag...$lastTag --oneline --no-merges --pretty=format:\"%s\"".execute().text.trim()
+
+    def changelog = ""
+    gitLogCmd.eachLine { line ->
+        if (line.contains("[skip-changelog]")) {
+            return changelog
+        }
+
+        def escapedLine = line
+        changelog += "* $escapedLine \n"
+    }
+
+    changelog += "\\n"
+    changelog = changelog.trim()
+
+    return changelog
+}
+
+task displayChangelog(group: "modding") {
+    doLast {
+        println(generateChangelog())
+    }
+}

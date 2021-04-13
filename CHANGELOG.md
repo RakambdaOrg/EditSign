@@ -1,3 +1,5 @@
+Further release notes can be found [on the releases page](https://github.com/RakSrinaNa/EditSign/releases).
+
 ## [Forge-1.16.5-2.2.0] - 2021-01-15
 * Port to 1.16.5
 

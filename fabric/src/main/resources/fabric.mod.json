@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "${modId}",
+  "version": "${version}",
+  "name": "EditSign",
+  "description": "Allow you to edit signs without breaking them.",
+  "authors": [
+    "RakSrinaNa"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/edit-sign",
+    "issues": "https://github.com/RakSrinaNa/EditSign/issues",
+    "sources": "https://github.com/RakSrinaNa/EditSign"
+  },
+  "license": "GPL-3.0",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "fr.raksrinana.editsign.fabric.EditSign"
+    ],
+    "client": [],
+    "server": [],
+    "modmenu": [
+      "fr.raksrinana.editsign.fabric.ModMenuImpl"
+    ]
+  },
+  "mixins": [
+    "editsign.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}
