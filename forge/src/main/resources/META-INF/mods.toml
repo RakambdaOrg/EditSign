@@ -29,5 +29,6 @@ side = "BOTH"
 [[dependencies.editsign]]
 modId = "cloth-config"
 mandatory = false
+versionRange = "[4.9.5,)"
 ordering = "NONE"
 side = "CLIENT"

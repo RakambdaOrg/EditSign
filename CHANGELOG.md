@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 ### Changed
-
+- Fabric - Move cloth GUI logic into a separate class so it isn't loaded on the server when config file is read
+- Forge - Fix mod not loading when cloth-config is present with Forge 36.1.10+
 
 ## [1.16.5-2.2.0] - 2021-01-15
 ### Changed
