@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "id": "${modId}",
   "version": "${version}",
-  "name": "EditSign",
+  "name": "${modName}",
   "description": "Allow you to edit signs without breaking them.",
   "authors": [
     "RakSrinaNa"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/edit-sign",
-    "issues": "https://github.com/RakSrinaNa/EditSign/issues",
-    "sources": "https://github.com/RakSrinaNa/EditSign"
+    "issues": "https://github.com/${repoUser}/${repoName}/issues",
+    "sources": "https://github.com/${repoUser}/${repoName}"
   },
   "license": "GPL-3.0",
   "icon": "logo.png",

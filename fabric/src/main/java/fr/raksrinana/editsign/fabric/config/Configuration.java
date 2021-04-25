@@ -8,7 +8,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import java.util.Collection;
 import static fr.raksrinana.editsign.fabric.EditSignUtils.getAsItems;
 

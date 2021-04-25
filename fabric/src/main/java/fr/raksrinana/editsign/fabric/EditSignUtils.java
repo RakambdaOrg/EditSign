@@ -1,27 +1,27 @@
 package fr.raksrinana.editsign.fabric;
 
 import net.fabricmc.fabric.api.tag.TagRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.empty;
-import static net.minecraft.util.registry.Registry.ITEM;
 
 public class EditSignUtils{
-	public static boolean canPlayerEdit(PlayerEntity playerEntity){
+	public static boolean canPlayerEdit(Player playerEntity){
 		Collection<Item> requiredItem = EditSign.config.getRequiredItem();
 		if(!requiredItem.isEmpty()){
-			Item playerItem = playerEntity.getStackInHand(playerEntity.getActiveHand()).getItem();
+			Item playerItem = playerEntity.getItemInHand(playerEntity.getUsedItemHand()).getItem();
 			if(requiredItem.stream().noneMatch(item -> item.equals(playerItem))){
 				return false;
 			}
 		}
-		return playerEntity.abilities.allowModifyWorld;
+		return playerEntity.mayBuild();
 	}
 	
 	public static Set<Item> getAsItems(String name){
@@ -39,11 +39,11 @@ public class EditSignUtils{
 			if(isTag){
 				name = name.substring(1);
 			}
-			Identifier identifier = new Identifier(name);
+			ResourceLocation identifier = new ResourceLocation(name);
 			if(isTag){
-				return TagRegistry.item(identifier).values().stream();
+				return TagRegistry.item(identifier).getValues().stream();
 			}
-			return Stream.of(ITEM.get(identifier));
+			return Stream.of(Registry.ITEM.get(identifier));
 		}
 		catch(Exception e){
 			return empty();

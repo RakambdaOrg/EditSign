@@ -1,7 +1,7 @@
 package fr.raksrinana.editsign.fabric.mixin;
 
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,14 +12,14 @@ import static fr.raksrinana.editsign.fabric.EditSignUtils.canPlayerEdit;
 @Mixin(SignBlockEntity.class)
 public final class SignBlockEntityMixin{
 	@Shadow
-	private boolean editable;
+	private boolean isEditable;
 	
-	@Inject(method = "onActivate", at = @At("HEAD"))
-	public void useOnBlock(PlayerEntity player, CallbackInfoReturnable<Boolean> callback){
+	@Inject(method = "executeClickCommands", at = @At("HEAD"))
+	public void useOnBlock(Player player, CallbackInfoReturnable<Boolean> callback){
 		if(canPlayerEdit(player)){
-			editable = true;
+			isEditable = true;
 			SignBlockEntity sign = (SignBlockEntity) (Object) this;
-			player.openEditSignScreen(sign);
+			player.openTextEdit(sign);
 		}
 	}
 }
