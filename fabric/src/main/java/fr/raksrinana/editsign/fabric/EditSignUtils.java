@@ -5,7 +5,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -14,9 +13,9 @@ import static java.util.stream.Stream.empty;
 
 public class EditSignUtils{
 	public static boolean canPlayerEdit(Player playerEntity){
-		Collection<Item> requiredItem = EditSign.config.getRequiredItem();
+		var requiredItem = EditSign.config.getRequiredItem();
 		if(!requiredItem.isEmpty()){
-			Item playerItem = playerEntity.getItemInHand(playerEntity.getUsedItemHand()).getItem();
+			var playerItem = playerEntity.getItemInHand(playerEntity.getUsedItemHand()).getItem();
 			if(requiredItem.stream().noneMatch(item -> item.equals(playerItem))){
 				return false;
 			}
@@ -35,11 +34,11 @@ public class EditSignUtils{
 	
 	public static Stream<Item> getItem(String name){
 		try{
-			boolean isTag = name.startsWith("#");
+			var isTag = name.startsWith("#");
 			if(isTag){
 				name = name.substring(1);
 			}
-			ResourceLocation identifier = new ResourceLocation(name);
+			var identifier = new ResourceLocation(name);
 			if(isTag){
 				return TagRegistry.item(identifier).getValues().stream();
 			}

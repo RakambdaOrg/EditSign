@@ -5,7 +5,7 @@ buildscript {
 
     dependencies {
         classpath("com.google.guava:guava:30.1.1-jre")
-        classpath("commons-io:commons-io:2.8.0")
+        classpath("commons-io:commons-io:2.9.0")
     }
 }
 
@@ -16,20 +16,45 @@ import org.jetbrains.changelog.ExtensionsKt
 
 plugins {
     id("com.matthewprenger.cursegradle") version("1.4.0")
-    id("com.modrinth.minotaur") version("1.2.0")
+    id("com.modrinth.minotaur") version("1.2.1")
     id("com.github.breadmoirai.github-release") version("2.2.12")
-    id("com.github.ben-manes.versions") version("0.38.0")
+    id("com.github.ben-manes.versions") version("0.39.0")
     id("org.jetbrains.changelog") version("1.1.2")
 }
 
 allprojects {
     apply plugin: "java"
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
         options.compilerArgs = ["-Xlint:deprecation"]
+    }
+
+    dependencies {
+        compileOnly(libs.lombok)
+        annotationProcessor(libs.lombok)
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = "Minecraft Libraries"
+            url = uri("https://libraries.minecraft.net")
+        }
+        maven {
+            name = 'CurseForge'
+            url = 'https://minecraft.curseforge.com/api/maven'
+        }
+        maven {
+            name = "ModMenu"
+            url = "https://maven.terraformersmc.com/releases/"
+        }
+        maven {
+            name = "Cloth Config"
+            url = "https://maven.shedaniel.me/"
+        }
     }
 }
 
@@ -37,8 +62,8 @@ group = "fr.raksrinana"
 archivesBaseName = "${project.modName}-${project.minecraft_version}"
 
 task buildJar(type: Jar, group: "modding") {
-    dependsOn ":common:jar", ":fabric:build", ":forge:build"
-    finalizedBy ":forge:signJar"
+    dependsOn ":common:jar", ":fabric:build"//, ":forge:build"
+    //finalizedBy ":forge:signJar"
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from zipTree("common/build/libs/common-${project.version}.jar"),
@@ -65,6 +90,7 @@ curseforge {
         id = "${project.curseforge_project_id}"
         changelogType = "markdown"
         addGameVersion project.minecraft_version
+        addGameVersion "Java 16"
         changelog = project.changelog.getLatest().toText()
         releaseType = "${project.releaseType}"
         mainArtifact(jar) {
@@ -72,12 +98,12 @@ curseforge {
         }
         relations {
             //Fabric
-            optionalDependency "fabric-api" //It's actually required
-            optionalDependency "modmenu"
-            embeddedLibrary "cloth-config"
+            optionalDependency("fabric-api") //It's actually required
+            optionalDependency("modmenu")
+            embeddedLibrary("cloth-config")
 
             //Forge
-            optionalDependency "cloth-config-forge"
+            optionalDependency("cloth-config-forge")
         }
     }
     options {
@@ -124,6 +150,8 @@ def writeUpdateJson() {
     json["changelog"] = changelogUrl
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
+    if (!json.hasProperty(project.minecraft_version))
+        json[project.minecraft_version] = new HashMap<>()
     if (!json[project.minecraft_version].containsKey(version.toString()))
         json[project.minecraft_version][version.toString()] = changelogUrl
     json[project.minecraft_version] = json[project.minecraft_version].sort([compare: { a, b -> b.compareTo(a) }] as Comparator)

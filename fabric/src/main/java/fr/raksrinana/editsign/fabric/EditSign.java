@@ -3,7 +3,6 @@ package fr.raksrinana.editsign.fabric;
 import fr.raksrinana.editsign.fabric.config.Configuration;
 import fr.raksrinana.editsign.fabric.config.validator.Validators;
 import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
@@ -23,7 +22,7 @@ public class EditSign implements ModInitializer{
 	
 	@Environment(EnvType.CLIENT)
 	private static void registerGui(){
-		GuiRegistry registry = AutoConfig.getGuiRegistry(Configuration.class);
+		var registry = AutoConfig.getGuiRegistry(Configuration.class);
 		
 		Validators.RUNNERS.forEach(runner -> registry.registerAnnotationTransformer((guis, i13n, field, config, defaults, guiProvider) -> guis.stream()
 				.peek(gui -> gui.setErrorSupplier(() -> runner.apply(gui.getValue(), field)))

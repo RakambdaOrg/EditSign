@@ -1,6 +1,8 @@
 package fr.raksrinana.editsign.fabric.mixin;
 
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,11 +17,22 @@ public final class SignBlockEntityMixin{
 	private boolean isEditable;
 	
 	@Inject(method = "executeClickCommands", at = @At("HEAD"))
-	public void useOnBlock(Player player, CallbackInfoReturnable<Boolean> callback){
-		if(canPlayerEdit(player)){
+	public void useOnBlock(ServerPlayer serverPlayer, CallbackInfoReturnable<Boolean> callback){
+		var itemStack = serverPlayer.getItemInHand(serverPlayer.getUsedItemHand());
+		var item = itemStack.getItem();
+		
+		var isDye = item instanceof DyeItem;
+		var isGlowInkSack = itemStack.is(Items.GLOW_INK_SAC);
+		var isInkSack = itemStack.is(Items.INK_SAC);
+		
+		if(isDye || isGlowInkSack || isInkSack){
+			return;
+		}
+		
+		if(canPlayerEdit(serverPlayer)){
 			isEditable = true;
 			SignBlockEntity sign = (SignBlockEntity) (Object) this;
-			player.openTextEdit(sign);
+			serverPlayer.openTextEdit(sign);
 		}
 	}
 }

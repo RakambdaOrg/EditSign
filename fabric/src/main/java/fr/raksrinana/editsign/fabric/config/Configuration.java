@@ -2,6 +2,7 @@ package fr.raksrinana.editsign.fabric.config;
 
 import fr.raksrinana.editsign.fabric.config.validator.ItemId;
 import fr.raksrinana.editsign.fabric.config.validator.Validators;
+import lombok.Getter;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -17,6 +18,7 @@ public class Configuration implements ConfigData{
 	@Tooltip(count = 4)
 	@Comment("Required item to edit signs")
 	@ItemId(allowEmpty = true)
+	@Getter
 	public String requiredItemId = "";
 	
 	public static Configuration register(){

@@ -1,0 +1,18 @@
+[versions]
+modmenu-version = "2.0.0-beta.7"
+cloth-config-fabric-version = "5.0.34"
+lombok-version = "1.18.20"
+minecraft-version = "1.17"
+fabric-loader-version = "0.11.3"
+fabric-api-version = "0.34.9+1.17"
+
+[libraries]
+modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu-version" }
+clothConfigFabric = { group = "me.shedaniel.cloth", name = "cloth-config-fabric", version.ref = "cloth-config-fabric-version" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok-version" }
+minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft-version" }
+fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader-version" }
+fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api-version" }
+
+[bundles]
+fabric = ["fabric-loader", "fabric-api"]

@@ -16,21 +16,18 @@ public class ItemIdRunner implements ValidatorRunner<ItemId>{
 		if(value == null){
 			return Optional.of(errorText);
 		}
-		if(value instanceof String){
-			String val = value.toString();
+		if(value instanceof String val){
 			if(annotation.allowEmpty() && val.isEmpty()){
 				// OK
 			}
 			else{
-				boolean valid = MINECRAFT_ID_PATTERN.matcher((String) value).matches();
-				if(!valid){
+				if(!MINECRAFT_ID_PATTERN.matcher((String) value).matches()){
 					return Optional.of(errorText);
 				}
 			}
 		}
-		else if(value instanceof List){
-			List<?> list = (List<?>) value;
-			boolean valid = list.stream()
+		else if(value instanceof List<?> list){
+			var valid = list.stream()
 					.filter(Objects::nonNull)
 					.map(Object::toString)
 					.allMatch(val -> MINECRAFT_ID_PATTERN.matcher(val).matches());
