@@ -55,6 +55,8 @@ minecraft {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 dependencies {
     minecraft(libs.forge)
     implementation project(":common")
