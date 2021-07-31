@@ -48,9 +48,13 @@ allprojects {
             url = 'https://minecraft.curseforge.com/api/maven'
         }
         maven {
-            name = "ModMenu"
-            url = "https://maven.terraformersmc.com/releases/"
+            name "ModMenu Github"
+            url = "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/"
         }
+//        maven {
+//            name = "ModMenu"
+//            url = "https://maven.terraformersmc.com/releases/"
+//        }
         maven {
             name = "Cloth Config"
             url = "https://maven.shedaniel.me/"
@@ -62,8 +66,8 @@ group = "fr.raksrinana"
 archivesBaseName = "${project.modName}-${project.minecraft_version}"
 
 task buildJar(type: Jar, group: "modding") {
-    dependsOn ":common:jar", ":fabric:build"//, ":forge:build"
-    //finalizedBy ":forge:signJar"
+    dependsOn ":common:jar", ":fabric:build", ":forge:build"
+    finalizedBy ":forge:signJar"
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from zipTree("common/build/libs/common-${project.version}.jar"),

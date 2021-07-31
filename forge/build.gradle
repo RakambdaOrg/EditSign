@@ -1,4 +1,4 @@
-import net.minecraftforge.gradle.common.task.SignJar
+import net.minecraftforge.gradle.common.tasks.SignJar
 
 buildscript {
     repositories {
@@ -6,7 +6,6 @@ buildscript {
             name = "forge"
             url = "https://maven.minecraftforge.net"
         }
-        jcenter()
         mavenCentral()
     }
     dependencies {
@@ -21,19 +20,34 @@ minecraft {
     runs {
         client {
             workingDirectory project.file("../run")
+            property "forge.logging.markers", "REGISTRIES"
             property "forge.logging.console.level", "debug"
             mods {
-                fallingtree {
+                editsign {
                     source sourceSets.main
                 }
             }
         }
 
         server {
-            workingDirectory project.file('../run')
+            workingDirectory project.file("../run")
+            property "forge.logging.markers", "REGISTRIES"
             property "forge.logging.console.level", "debug"
             mods {
-                fallingtree {
+                editsign {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file("../run")
+            property "forge.logging.markers", "REGISTRIES"
+            property "forge.logging.console.level", "debug"
+            args '--mod', 'editsign', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                editsign {
                     source sourceSets.main
                 }
             }
@@ -42,20 +56,15 @@ minecraft {
 }
 
 dependencies {
-    minecraft("net.minecraftforge:forge:${forge_version}")
+    minecraft(libs.forge)
     implementation project(":common")
 
-    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"))
-}
-
-repositories {
-    maven {
-        name = "Cloth Config"
-        url = "https://maven.shedaniel.me/"
-    }
+//    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:4.11.26"))
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
     from "src/main/resources", "../common/src/main/resources"
 
     filesMatching("META-INF/mods.toml") {

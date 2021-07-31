@@ -1,6 +1,6 @@
 package fr.raksrinana.editsign.forge.config;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import java.util.Collection;
 import static fr.raksrinana.editsign.forge.EditSignUtils.getAsItems;

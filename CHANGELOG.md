@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 ### Changed
-- Port to 1.17
+- Port to 1.17.1
 
 ## [1.16.5-2.2.1] - 2021-04-26
 ### Changed

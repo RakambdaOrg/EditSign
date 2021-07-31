@@ -1,13 +1,13 @@
 package fr.raksrinana.editsign.forge;
 
 import fr.raksrinana.editsign.forge.config.Config;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Objects;
@@ -19,8 +19,8 @@ import static java.util.stream.Stream.empty;
 import static net.minecraftforge.registries.ForgeRegistries.ITEMS;
 
 public class EditSignUtils{
-	public static boolean canPlayerEdit(PlayerEntity playerEntity, ItemStack itemStack){
-		return playerEntity.mayBuild() && !playerEntity.isCrouching() && !isHoldingDye(itemStack) && hasRightItem(itemStack);
+	public static boolean canPlayerEdit(Player player, ItemStack itemStack){
+		return player.mayBuild() && !player.isCrouching() && !isHoldingDye(itemStack) && hasRightItem(itemStack);
 	}
 	
 	private static boolean isHoldingDye(ItemStack itemStack){
@@ -28,12 +28,12 @@ public class EditSignUtils{
 	}
 	
 	private static boolean hasRightItem(ItemStack itemStack){
-		Collection<Item> requiredItem = Config.COMMON.getRequiredItem();
+		var requiredItem = Config.COMMON.getRequiredItem();
 		if(requiredItem.isEmpty()){
 			return true;
 		}
 		
-		Item playerItem = itemStack.getItem();
+		var playerItem = itemStack.getItem();
 		return requiredItem.stream().anyMatch(item -> item.equals(playerItem));
 	}
 	
@@ -49,16 +49,16 @@ public class EditSignUtils{
 	@Nonnull
 	public static Stream<Item> getItem(String name){
 		try{
-			boolean isTag = name.startsWith("#");
+			var isTag = name.startsWith("#");
 			if(isTag){
 				name = name.substring(1);
 			}
-			ResourceLocation resourceLocation = new ResourceLocation(name);
+			var resourceLocation = new ResourceLocation(name);
 			if(isTag){
 				return Optional.ofNullable(ItemTags.getAllTags().getTag(resourceLocation))
-						.map(ITag::getValues)
-						.map(Collection::stream)
-						.orElse(empty());
+						.map(Tag::getValues)
+						.stream()
+						.flatMap(Collection::stream);
 			}
 			return Stream.of(ITEMS.getValue(resourceLocation));
 		}

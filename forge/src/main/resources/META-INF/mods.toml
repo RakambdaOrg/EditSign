@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[36,)"
+loaderVersion = "[37,)"
 issueTrackerURL = "https://github.com/${repoUser}/${repoName}/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
@@ -17,7 +17,7 @@ description = '''Allow you to edit signs without breaking them.'''
 [[dependencies.editsign]]
 modId = "forge"
 mandatory = true
-versionRange = "[36.0.0,)"
+versionRange = "[37.0.0,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.editsign]]
