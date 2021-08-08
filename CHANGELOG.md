@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Changed
+- Add back support for cloth config & fabric
+
 ## [1.17.1-2.2.2] - 2021-07-31
 ### Changed
 - Port to 1.17.1

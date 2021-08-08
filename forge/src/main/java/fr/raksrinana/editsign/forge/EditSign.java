@@ -21,7 +21,7 @@ public class EditSign{
 		ModLoadingContext.get().registerExtensionPoint(DisplayTest.class, () -> new DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
 		
-		if(ModList.get().isLoaded("cloth-config"))
+		if(ModList.get().isLoaded("cloth_config"))
 		{
 			Class.forName("fr.raksrinana.editsign.forge.config.cloth.ClothConfigHook")
 					.asSubclass(ClothConfigHook.class)

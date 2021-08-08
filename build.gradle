@@ -48,13 +48,9 @@ allprojects {
             url = 'https://minecraft.curseforge.com/api/maven'
         }
         maven {
-            name "ModMenu Github"
-            url = "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/"
+            name = "ModMenu"
+            url = "https://maven.terraformersmc.com/releases/"
         }
-//        maven {
-//            name = "ModMenu"
-//            url = "https://maven.terraformersmc.com/releases/"
-//        }
         maven {
             name = "Cloth Config"
             url = "https://maven.shedaniel.me/"
