@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Changed
+## [1.17.1-2.2.3] - 2021-08-08
+### Changed
 - Add back support for cloth config & fabric
 
 ## [1.17.1-2.2.2] - 2021-07-31
