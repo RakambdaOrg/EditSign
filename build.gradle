@@ -62,7 +62,7 @@ group = "fr.raksrinana"
 archivesBaseName = "${project.modName}-${project.minecraft_version}"
 
 task buildJar(type: Jar, group: "modding") {
-    dependsOn ":common:build", ":fabric:build", ":forge:build"
+    dependsOn assemble, ":common:build", ":fabric:build", ":forge:build"
     finalizedBy ":forge:signJar"
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -142,21 +142,20 @@ githubRelease {
 
 def writeUpdateJson() {
     def version = project.version
+    def mcVersion = project.minecraft_version
     def slurper = new JsonSlurper()
     def file = project.file("update.json")
     def json = slurper.parse(file)
-    def changelogUrl = "https://github.com/${project.repoUser}/${project.repoName}/blob/${project.minecraft_version}/CHANGELOG.md"
+    def changelogUrl = "https://github.com/${project.repoUser}/${project.repoName}/releases"
 
     json["changelog"] = changelogUrl
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
-    if (!json.hasProperty(project.minecraft_version))
-        json[project.minecraft_version] = new HashMap<>()
-    if (!json[project.minecraft_version].containsKey(version.toString()))
-        json[project.minecraft_version][version.toString()] = changelogUrl
-    json[project.minecraft_version] = json[project.minecraft_version].sort([compare: { a, b -> b.compareTo(a) }] as Comparator)
-    json["promos"]["${project.minecraft_version}-latest"] = version
-    json["promos"]["${project.minecraft_version}-recommended"] = version
+    json.putIfAbsent(mcVersion, new HashMap<>())
+    json[mcVersion].putIfAbsent(version, changelogUrl + "/" + mcVersion + "-" + version)
+    json[mcVersion] = json[mcVersion].sort([compare: { a, b -> a.compareTo(b) }] as Comparator)
+    json["promos"]["${mcVersion}-latest"] = version
+    json["promos"]["${mcVersion}-recommended"] = version
 
     println(json)
     file.write(JsonOutput.prettyPrint(JsonOutput.toJson(json)))
