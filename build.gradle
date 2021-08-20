@@ -112,7 +112,7 @@ curseforge {
 }
 
 task publishModrinth(type: TaskModrinthUpload, group: "upload") {
-    dependsOn buildJar
+    dependsOn build
 
     token = project.findProperty("modrinthToken") as String
     projectId = project.modrinth_project_id
