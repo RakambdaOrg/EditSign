@@ -9,17 +9,15 @@ buildscript {
     }
 }
 
+
 import com.modrinth.minotaur.TaskModrinthUpload
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import org.jetbrains.changelog.ExtensionsKt
 
 plugins {
     id("com.matthewprenger.cursegradle") version("1.4.0")
     id("com.modrinth.minotaur") version("1.2.1")
-    id("com.github.breadmoirai.github-release") version("2.2.12")
     id("com.github.ben-manes.versions") version("0.39.0")
-    id("org.jetbrains.changelog") version("1.1.2")
 }
 
 allprojects {
@@ -91,10 +89,10 @@ curseforge {
         changelogType = "markdown"
         addGameVersion project.minecraft_version
         addGameVersion "Java 16"
-        changelog = project.changelog.getLatest().toText()
+        changelog = project.findProperty("changelog") ?: "No changelog provided"
         releaseType = "${project.releaseType}"
         mainArtifact(jar) {
-            displayName = "${archivesBaseName}-${project.version}"
+            displayName = "${project.minecraft_version}-${project.version}"
         }
         relations {
             //Fabric
@@ -118,26 +116,14 @@ task publishModrinth(type: TaskModrinthUpload, group: "upload") {
 
     token = project.findProperty("modrinthToken") as String
     projectId = project.modrinth_project_id
-    versionNumber = "${project.minecraft_version}-${project.version}"
-    versionName = "${archivesBaseName}-${project.version}"
+    versionNumber = "${project.version}"
+    versionName = "${project.minecraft_version}-${project.version}"
     uploadFile = jar
     addGameVersion(project.minecraft_version as String)
     addLoader("fabric")
     addLoader("forge")
     versionType = project.releaseType.toLowerCase()
-    changelog = project.changelog.getLatest().toText()
-}
-
-githubRelease {
-    def tag = "${project.minecraft_version}-${project.version}"
-
-    owner = project.repoUser
-    repo.set(project.repoName as String)
-    token("${project.findProperty("githubReleaseToken")}")
-    tagName.set(tag)
-    releaseName.set(tag)
-    targetCommitish.set("${project.minecraft_version}")
-    body.set(project.changelog.getLatest().toText())
+    changelog = project.findProperty("changelog") ?: "No changelog provided"
 }
 
 def writeUpdateJson() {
@@ -152,7 +138,7 @@ def writeUpdateJson() {
 
     // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
     json.putIfAbsent(mcVersion, new HashMap<>())
-    json[mcVersion].putIfAbsent(version, changelogUrl + "/" + mcVersion + "-" + version)
+    json[mcVersion].putIfAbsent(version, changelogUrl + "/" + version)
     json[mcVersion] = json[mcVersion].sort([compare: { a, b -> a.compareTo(b) }] as Comparator)
     json["promos"]["${mcVersion}-latest"] = version
     json["promos"]["${mcVersion}-recommended"] = version
@@ -168,14 +154,3 @@ task createUpdateJson(group: "modding") {
     }
 }
 build.finalizedBy createUpdateJson
-
-changelog {
-    version = "${project.minecraft_version}-${project.version}"
-    path = "${project.projectDir}/CHANGELOG.md"
-    header = { "[${project.minecraft_version}-${project.version}] - ${ExtensionsKt.date("yyyy-MM-dd")}" }
-    headerParserRegex = ~/\d+\.\d+\.\d+-\d+\.\d+\.\d+/
-    itemPrefix = "-"
-    keepUnreleasedSection = true
-    unreleasedTerm = "[Unreleased]"
-    groups = ["Changed"]
-}
