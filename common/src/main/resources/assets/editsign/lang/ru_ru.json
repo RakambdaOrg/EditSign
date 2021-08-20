@@ -1,0 +1,11 @@
+{
+  "text.autoconfig.editsign.error.invalidItemResourceLocation": "Неверный формат. Укажите предмет в виде \"mod_id:id_предмета\"",
+  "text.autoconfig.editsign.title": "Настройки EditSign",
+  "text.autoconfig.editsign.category.default": "Основные",
+  "text.autoconfig.editsign.option.requiredItemId": "Требуемый id предмета",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[0]": "ID предмета, который нужно держать",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[1]": "в руке, чтобы редактировать табличку.",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[2]": "Если не задан, то подойдёт любой предмет.",
+  "text.autoconfig.editsign.option.requiredItemId.@Tooltip[3]": "",
+  "editsign.action.not_editable": "Эта табличка не может быть отредактирована."
+}
