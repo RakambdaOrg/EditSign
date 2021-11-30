@@ -9,14 +9,10 @@ pluginManagement {
         }
         gradlePluginPortal()
     }
-
-    val loom_version: String by settings
-    plugins {
-        id("fabric-loom").version(loom_version)
-    }
 }
 
 rootProject.name = "EditSign"
 include("common")
 include("fabric")
-include("forge")
+//TODO: Renable for 1.18
+//include("forge")

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import static java.util.Objects.isNull;
 
 public class ItemIdRunner implements ValidatorRunner<ItemId>{
 	private static final Pattern MINECRAFT_ID_PATTERN = Pattern.compile("#?[a-z0-9_.-]+:[a-z0-9/._-]+");
@@ -13,14 +14,11 @@ public class ItemIdRunner implements ValidatorRunner<ItemId>{
 	
 	@Override
 	public Optional<Component> apply(Object value, ItemId annotation){
-		if(value == null){
+		if(isNull(value)){
 			return Optional.of(errorText);
 		}
 		if(value instanceof String val){
-			if(annotation.allowEmpty() && val.isEmpty()){
-				// OK
-			}
-			else{
+			if(!annotation.allowEmpty() || !val.isEmpty()){
 				if(!MINECRAFT_ID_PATTERN.matcher((String) value).matches()){
 					return Optional.of(errorText);
 				}

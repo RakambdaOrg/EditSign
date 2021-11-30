@@ -1,6 +1,6 @@
 package fr.raksrinana.editsign.fabric;
 
-import net.fabricmc.fabric.api.tag.TagRegistry;
+import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +40,7 @@ public class EditSignUtils{
 			}
 			var identifier = new ResourceLocation(name);
 			if(isTag){
-				return TagRegistry.item(identifier).getValues().stream();
+				return TagFactory.ITEM.create(identifier).getValues().stream();
 			}
 			return Stream.of(Registry.ITEM.get(identifier));
 		}
