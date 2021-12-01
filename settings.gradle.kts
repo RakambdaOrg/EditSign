@@ -14,5 +14,4 @@ pluginManagement {
 rootProject.name = "EditSign"
 include("common")
 include("fabric")
-//TODO: Renable for 1.18
-//include("forge")
+include("forge")

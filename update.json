@@ -11,10 +11,15 @@
         "1.17-latest": "2.2.1",
         "1.17-recommended": "2.2.1",
         "1.17.1-latest": "2.2.4",
-        "1.17.1-recommended": "2.2.4"
+        "1.17.1-recommended": "2.2.4",
+        "1.18-latest": "2.2.6",
+        "1.18-recommended": "2.2.6"
     },
     "1.17.1": {
         "2.2.3": "https://github.com/RakSrinaNa/EditSign/blob/1.17.1/CHANGELOG.md",
         "2.2.4": "https://github.com/RakSrinaNa/EditSign/releases/2.2.4"
+    },
+    "1.18": {
+        "2.2.6": "https://github.com/RakSrinaNa/EditSign/releases/2.2.6"
     }
 }

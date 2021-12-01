@@ -11,8 +11,8 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fmlclient.ConfigGuiHandler.ConfigGuiFactory;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Function;
@@ -40,7 +40,7 @@ public class ClothConfigHook{
 	}
 	
 	public void load(){
-		ModLoadingContext.get().registerExtensionPoint(ConfigGuiFactory.class, () -> new ConfigGuiFactory((minecraft, screen) -> {
+		ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((minecraft, screen) -> {
 			ConfigBuilder builder = ConfigBuilder.create()
 					.setParentScreen(screen)
 					.setTitle(new TextComponent("EditSign"));

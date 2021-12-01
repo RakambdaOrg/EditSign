@@ -29,10 +29,10 @@
     "editsign.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.12.8",
     "fabric-resource-loader-v0": "*",
     "fabric": ">=0.20",
-    "java": ">=16"
+    "java": ">=17"
   },
   "suggests": {
     "modmenu": "*"
