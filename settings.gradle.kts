@@ -14,4 +14,4 @@ pluginManagement {
 rootProject.name = "EditSign"
 include("common")
 include("fabric")
-include("forge")
+//include("forge")
