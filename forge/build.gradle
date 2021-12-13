@@ -61,7 +61,7 @@ dependencies {
     minecraft(libs.forge)
     implementation project(":common")
 
-    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:6.0.43"))
+    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:6.1.48"))
 }
 
 processResources {
@@ -85,7 +85,7 @@ task signJar(type: SignJar, dependsOn: rootProject.buildJar, group: "modding") {
                 && rootProject.file(project.findProperty("forgeKeyStore")).exists()
     }
 
-//    keyStore = rootProject.file(project.findProperty("forgeKeyStore")).absolutePath
+    keyStore = rootProject.file(project.findProperty("forgeKeyStore")).absolutePath
     alias = project.findProperty("forgeKeyStoreAlias")
     storePass = project.findProperty("forgeKeyStorePass")
     keyPass = project.findProperty("forgeKeyStoreKeyPass")
