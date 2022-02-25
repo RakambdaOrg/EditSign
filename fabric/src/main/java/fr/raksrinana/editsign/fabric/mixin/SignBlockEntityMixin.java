@@ -1,5 +1,8 @@
 package fr.raksrinana.editsign.fabric.mixin;
 
+import fr.raksrinana.editsign.fabric.EditSign;
+import fr.raksrinana.editsign.fabric.common.wrapper.HandWrapper;
+import fr.raksrinana.editsign.fabric.common.wrapper.PlayerWrapper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Items;
@@ -9,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import static fr.raksrinana.editsign.fabric.EditSignUtils.canPlayerEdit;
 
 @Mixin(SignBlockEntity.class)
 public final class SignBlockEntityMixin{
@@ -29,7 +31,9 @@ public final class SignBlockEntityMixin{
 			return;
 		}
 		
-		if(canPlayerEdit(serverPlayer)){
+		var wrappedPlayer = new PlayerWrapper(serverPlayer);
+		var wrappedHand = new HandWrapper(serverPlayer.getUsedItemHand());
+		if(EditSign.getMod().canPlayerEdit(wrappedPlayer, wrappedHand)){
 			isEditable = true;
 			SignBlockEntity sign = (SignBlockEntity) (Object) this;
 			serverPlayer.openTextEdit(sign);

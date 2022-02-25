@@ -5,7 +5,9 @@ plugins {
 dependencies {
     minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
+
     modImplementation(libs.bundles.fabric)
+
     implementation(project(":common"))
 
     modImplementation(libs.modmenu) {
@@ -41,7 +43,7 @@ loom {
     val modId: String by project
 
     mixin {
-        getDefaultRefmapName().set("fabric.${modId}.refmap.json")
+        defaultRefmapName.set("fabric.${modId}.refmap.json")
     }
 
     runs {
@@ -54,7 +56,7 @@ loom {
         create("editSignServer") {
             server()
 
-            property("fabric.log.level", "debug")
+            property("fabric.log.level", "info")
             vmArg("-XX:+ShowCodeDetailsInExceptionMessages")
         }
     }

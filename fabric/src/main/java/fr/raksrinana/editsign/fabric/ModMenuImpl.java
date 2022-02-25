@@ -2,29 +2,32 @@ package fr.raksrinana.editsign.fabric;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import fr.raksrinana.editsign.fabric.config.Configuration;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigManager;
-import me.shedaniel.autoconfig.gui.ConfigScreenProvider;
-import me.shedaniel.autoconfig.gui.DefaultGuiProviders;
-import me.shedaniel.autoconfig.gui.DefaultGuiTransformers;
-import me.shedaniel.autoconfig.gui.registry.ComposedGuiRegistryAccess;
-import me.shedaniel.autoconfig.gui.registry.DefaultGuiRegistryAccess;
-import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
-import me.shedaniel.autoconfig.gui.registry.api.GuiRegistryAccess;
+import fr.raksrinana.editsign.common.EditSignCommon;
+import fr.raksrinana.editsign.fabric.cloth.ClothConfigHook;
+import lombok.extern.log4j.Log4j2;
+import net.fabricmc.loader.api.FabricLoader;
+import java.lang.reflect.InvocationTargetException;
 
-@SuppressWarnings("unused")
+@Log4j2
 public class ModMenuImpl implements ModMenuApi{
-	private static final GuiRegistry defaultGuiRegistry = DefaultGuiTransformers.apply(DefaultGuiProviders.apply(new GuiRegistry()));
-	
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory(){
-		return screen -> new ConfigScreenProvider<>(
-				(ConfigManager<Configuration>) AutoConfig.getConfigHolder(Configuration.class), getGuiRegistryAccess(), screen)
-				.get();
-	}
-	
-	private static GuiRegistryAccess getGuiRegistryAccess(){
-		return new ComposedGuiRegistryAccess(defaultGuiRegistry, AutoConfig.getGuiRegistry(Configuration.class), new DefaultGuiRegistryAccess());
+		if(FabricLoader.getInstance().isModLoaded("cloth-config")){
+			return (screen) -> {
+				try{
+					return Class.forName("fr.raksrinana.editsign.fabric.cloth.ClothConfigHook")
+							.asSubclass(ClothConfigHook.class)
+							.getConstructor(EditSignCommon.class)
+							.newInstance(EditSign.getMod())
+							.load()
+							.apply(screen);
+				}
+				catch(ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e){
+					log.error("Failed to hook into ClothConfig", e);
+				}
+				return null;
+			};
+		}
+		return screen -> null;
 	}
 }
