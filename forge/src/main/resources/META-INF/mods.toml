@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[39,)"
+loaderVersion = "[40,)"
 issueTrackerURL = "https://github.com/${repoUser}/${repoName}/issues"
 license = "LGPL-3.0"
 
@@ -7,7 +7,7 @@ license = "LGPL-3.0"
 modId="${modId}"
 version="${version}"
 displayName = "${modName}"
-updateJSONURL = "https://raw.githubusercontent.com/${repoUser}/${repoName}/${minecraft_version}/update.json"
+updateJSONURL = "https://raw.githubusercontent.com/${repoUser}/${repoName}/${minecraftVersion}/update.json"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
 authors = "RakSrinaNa"
@@ -16,13 +16,13 @@ description = '''Allow you to edit signs without breaking them.'''
 [[dependencies.editsign]]
 modId = "forge"
 mandatory = true
-versionRange = "[39,)"
+versionRange = "[40,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.editsign]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[${minecraft_version}]"
+versionRange = "[${minecraftVersion}]"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.editsign]]
