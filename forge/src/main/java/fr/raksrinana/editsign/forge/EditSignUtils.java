@@ -1,17 +1,17 @@
 package fr.raksrinana.editsign.forge;
 
 import fr.raksrinana.editsign.forge.config.Config;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
@@ -55,15 +55,19 @@ public class EditSignUtils{
 			}
 			var resourceLocation = new ResourceLocation(name);
 			if(isTag){
-				return Optional.ofNullable(ItemTags.getAllTags().getTag(resourceLocation))
-						.map(Tag::getValues)
-						.stream()
-						.flatMap(Collection::stream);
+				var tag = TagKey.m_203882_(Registry.ITEM_REGISTRY, resourceLocation);
+				return getRegistryTagContent(Registry.ITEM, tag);
 			}
 			return Stream.of(ITEMS.getValue(resourceLocation));
 		}
 		catch(Exception e){
 			return empty();
 		}
+	}
+	
+	@NotNull
+	private static <T> Stream<T> getRegistryTagContent(@NotNull Registry<T> registry, @NotNull TagKey<T> tag){
+		return registry.m_203431_(tag).stream()
+				.flatMap(a -> a.m_203614_().map(Holder::m_203334_));
 	}
 }
