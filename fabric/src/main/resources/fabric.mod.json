@@ -22,7 +22,7 @@
     "client": [],
     "server": [],
     "modmenu": [
-      "fr.raksrinana.editsign.fabric.ModMenuImpl"
+      "fr.raksrinana.editsign.fabric.client.ModMenuImpl"
     ]
   },
   "mixins": [

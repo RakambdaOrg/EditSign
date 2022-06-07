@@ -7,7 +7,8 @@ import fr.raksrinana.editsign.fabric.common.wrapper.ComponentWrapper;
 import fr.raksrinana.editsign.fabric.common.wrapper.ItemWrapper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.NotNull;
@@ -17,13 +18,13 @@ import static java.util.stream.Stream.empty;
 public class EditSignCommonsImpl extends EditSignCommon{
 	@Override
 	@NotNull
-	public  IComponent translate(@NotNull String key, Object... objects){
-		return new ComponentWrapper(new TranslatableComponent(key, objects));
+	public IComponent translate(@NotNull String key, Object... objects){
+		return new ComponentWrapper(MutableComponent.create(new TranslatableContents(key, objects)));
 	}
 	
 	@Override
 	@NotNull
-	public  Stream<IItem> getItem(@NotNull String name){
+	public Stream<IItem> getItem(@NotNull String name){
 		try{
 			var isTag = name.startsWith("#");
 			if(isTag){

@@ -67,4 +67,5 @@ jobs:
           cache-disabled: true
           arguments: |
             curseforge
-            publishModrinth
+            modrinth
+#            modrinthSyncBody

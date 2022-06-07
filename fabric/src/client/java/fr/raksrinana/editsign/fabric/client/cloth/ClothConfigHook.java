@@ -1,4 +1,4 @@
-package fr.raksrinana.editsign.fabric.cloth;
+package fr.raksrinana.editsign.fabric.client.cloth;
 
 import fr.raksrinana.editsign.common.EditSignCommon;
 import fr.raksrinana.editsign.common.config.Configuration;
@@ -9,8 +9,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class ClothConfigHook extends ClothHookBase{
 		return (screen) -> {
 			var builder = ConfigBuilder.create()
 					.setParentScreen(screen)
-					.setTitle(new TextComponent("FallingTree"));
+					.setTitle(MutableComponent.create(new LiteralContents("FallingTree")));
 			
 			var configuration = getMod().getConfiguration();
 			builder.setSavingRunnable(configuration::onUpdate);
@@ -40,14 +40,14 @@ public class ClothConfigHook extends ClothHookBase{
 	@Environment(EnvType.CLIENT)
 	public void fillConfigScreen(@NotNull ConfigBuilder builder, @NotNull Configuration config){
 		var requiredItemEntry = builder.entryBuilder()
-				.startStrField(new TranslatableComponent(getFieldName(null, "requiredItemId")), config.getRequiredItemId())
+				.startStrField(translatable(getFieldName(null, "requiredItemId")), config.getRequiredItemId())
 				.setDefaultValue("")
 				.setTooltip(getTooltips(null, "requiredItemId", 2))
 				.setSaveConsumer(config::setRequiredItemId)
 				.setErrorSupplier(map(getMinecraftItemIdCellError()))
 				.build();
 		
-		var general = builder.getOrCreateCategory(new TranslatableComponent("text.autoconfig.fallingtree.category.default"));
+		var general = builder.getOrCreateCategory(translatable("text.autoconfig.fallingtree.category.default"));
 		general.addEntry(requiredItemEntry);
 	}
 	
@@ -62,5 +62,10 @@ public class ClothConfigHook extends ClothHookBase{
 				.map(IComponent::getRaw)
 				.map(Component.class::cast)
 				.toArray(Component[]::new);
+	}
+	
+	@NotNull
+	private Component translatable(@NotNull String key){
+		return (Component) getMod().translate(key).getRaw();
 	}
 }
