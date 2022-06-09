@@ -1,7 +1,9 @@
 package fr.raksrinana.editsign.forge;
 
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -28,7 +30,9 @@ public final class ForgeEventSubscriber{
 					player.openTextEdit(sign);
 				}
 				else{
-					player.sendMessage(new TranslatableComponent(EditSign.MOD_ID + ".action.not_editable"), Util.NIL_UUID);
+					if(player instanceof ServerPlayer serverPlayer){
+						serverPlayer.m_215098_(MutableComponent.m_237204_(new TranslatableContents(EditSign.MOD_ID + ".action.not_editable")), ChatType.f_130598_); //Send it directly to player?
+					}
 				}
 			}
 		}

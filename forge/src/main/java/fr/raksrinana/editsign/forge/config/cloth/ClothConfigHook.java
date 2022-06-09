@@ -7,12 +7,14 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.fml.ModLoadingContext;
+import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Function;
@@ -33,7 +35,7 @@ public class ClothConfigHook{
 			}
 			
 			if(!valid){
-				return Optional.of(new TranslatableComponent("text.autoconfig.editsign.error.invalidItemResourceLocation"));
+				return Optional.of(translatable("text.autoconfig.editsign.error.invalidItemResourceLocation"));
 			}
 			return Optional.empty();
 		};
@@ -43,7 +45,7 @@ public class ClothConfigHook{
 		ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((minecraft, screen) -> {
 			ConfigBuilder builder = ConfigBuilder.create()
 					.setParentScreen(screen)
-					.setTitle(new TextComponent("EditSign"));
+					.setTitle(MutableComponent.m_237204_(new LiteralContents("EditSign")));
 			
 			fillConfigScreen(builder);
 			
@@ -56,15 +58,20 @@ public class ClothConfigHook{
 		CommonConfig config = Config.COMMON;
 		
 		StringListEntry reverseSneakingEntry = builder.entryBuilder()
-				.startStrField(new TranslatableComponent(getFieldName("requiredItemId")), config.getRequiredItemStr())
+				.startStrField(translatable(getFieldName("requiredItemId")), config.getRequiredItemStr())
 				.setDefaultValue("")
 				.setTooltip(getTooltips("requiredItemId", 4))
 				.setSaveConsumer(config::setRequiredItemId)
 				.setErrorSupplier(getMinecraftItemIdCellError())
 				.build();
 		
-		ConfigCategory general = builder.getOrCreateCategory(new TranslatableComponent("text.autoconfig.editsign.category.default"));
+		ConfigCategory general = builder.getOrCreateCategory(translatable("text.autoconfig.editsign.category.default"));
 		general.addEntry(reverseSneakingEntry);
+	}
+	
+	@NotNull
+	private static Component translatable(@NotNull String key){
+		return MutableComponent.m_237204_(new TranslatableContents(key));
 	}
 	
 	private String getFieldName(String fieldName){
@@ -83,7 +90,7 @@ public class ClothConfigHook{
 			}
 		}
 		return keys.stream()
-				.map(TextComponent::new)
+				.map(ClothConfigHook::translatable)
 				.toArray(Component[]::new);
 	}
 }
