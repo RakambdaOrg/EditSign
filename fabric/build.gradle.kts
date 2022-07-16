@@ -56,14 +56,17 @@ loom {
     }
 
     runs {
-        create("editSignClient") {
+        create("ESFabricClient") {
             client()
+            runDir("run/client")
 
-            property("fabric.log.level", "debug")
+            property("fabric.log.level", "info")
             vmArg("-XX:+ShowCodeDetailsInExceptionMessages")
+            programArgs("--uuid=123", "--username=Dev")
         }
-        create("editSignServer") {
+        create("ESFabricServer") {
             server()
+            runDir("run/server")
 
             property("fabric.log.level", "info")
             vmArg("-XX:+ShowCodeDetailsInExceptionMessages")

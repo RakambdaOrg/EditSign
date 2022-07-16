@@ -5,10 +5,11 @@ plugins {
 }
 
 minecraft {
-    mappings channel: "${mappings_channel}", version: "${mappings_version}"
+    mappings channel: "official", version: "${libs.versions.forgeMappingsVersion.get()}"
     runs {
         client {
-            workingDirectory project.file("../run")
+            taskName "runESForgeClient"
+            workingDirectory project.file("./run/client")
             property "forge.logging.markers", "REGISTRIES"
             property "forge.logging.console.level", "debug"
             mods {
@@ -19,7 +20,8 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file("../run")
+            taskName "runESForgeServer"
+            workingDirectory project.file("./run/server")
             property "forge.logging.markers", "REGISTRIES"
             property "forge.logging.console.level", "debug"
             mods {
@@ -30,7 +32,8 @@ minecraft {
         }
 
         gameTestServer {
-            workingDirectory project.file("../run")
+            taskName "runESForgeTestServer"
+            workingDirectory project.file("./run/test")
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'editsign'
@@ -43,7 +46,8 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file("../run")
+            taskName "runESForgeData"
+            workingDirectory project.file("./run/data")
             property "forge.logging.markers", "REGISTRIES"
             property "forge.logging.console.level", "debug"
             args '--mod', 'editsign', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -57,11 +61,22 @@ minecraft {
     }
 }
 
+configurations {
+    library
+    implementation.extendsFrom library
+}
+
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft(libs.forge)
-    implementation project(":common")
+    library(project(":common"))
 
     implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${libs.versions.clothConfigVersion.get()}"))
 }
