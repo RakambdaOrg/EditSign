@@ -55,7 +55,7 @@ public class EditSignUtils{
 			}
 			var resourceLocation = new ResourceLocation(name);
 			if(isTag){
-				var tag = TagKey.m_203882_(Registry.ITEM_REGISTRY, resourceLocation);
+				var tag = TagKey.create(Registry.ITEM_REGISTRY, resourceLocation);
 				return getRegistryTagContent(Registry.ITEM, tag);
 			}
 			return Stream.of(ITEMS.getValue(resourceLocation));
@@ -67,7 +67,7 @@ public class EditSignUtils{
 	
 	@NotNull
 	private static <T> Stream<T> getRegistryTagContent(@NotNull Registry<T> registry, @NotNull TagKey<T> tag){
-		return registry.m_203431_(tag).stream()
-				.flatMap(a -> a.m_203614_().map(Holder::m_203334_));
+		return registry.getTag(tag).stream()
+				.flatMap(a -> a.stream().map(Holder::value));
 	}
 }

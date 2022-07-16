@@ -21,9 +21,9 @@ public final class ForgeEventSubscriber{
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-		var player = event.getPlayer();
+		var player = event.getEntity();
 		if(canPlayerEdit(player, event.getItemStack())){
-			var blockEntity = event.getWorld().getBlockEntity(event.getPos());
+			var blockEntity = event.getLevel().getBlockEntity(event.getPos());
 			if(blockEntity instanceof SignBlockEntity sign){
 				setSignEditable(sign);
 				if(sign.isEditable()){
@@ -31,7 +31,7 @@ public final class ForgeEventSubscriber{
 				}
 				else{
 					if(player instanceof ServerPlayer serverPlayer){
-						serverPlayer.m_215098_(MutableComponent.m_237204_(new TranslatableContents(EditSign.MOD_ID + ".action.not_editable")), ChatType.f_130598_); //Send it directly to player?
+						serverPlayer.sendSystemMessage(MutableComponent.create(new TranslatableContents(EditSign.MOD_ID + ".action.not_editable")), ChatType.CHAT);
 					}
 				}
 			}
