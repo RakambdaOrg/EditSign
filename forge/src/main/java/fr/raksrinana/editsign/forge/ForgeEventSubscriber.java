@@ -1,6 +1,5 @@
 package fr.raksrinana.editsign.forge;
 
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,7 +30,7 @@ public final class ForgeEventSubscriber{
 				}
 				else{
 					if(player instanceof ServerPlayer serverPlayer){
-						serverPlayer.sendSystemMessage(MutableComponent.create(new TranslatableContents(EditSign.MOD_ID + ".action.not_editable")), ChatType.CHAT);
+						serverPlayer.sendSystemMessage(MutableComponent.create(new TranslatableContents(EditSign.MOD_ID + ".action.not_editable")), false);
 					}
 				}
 			}
