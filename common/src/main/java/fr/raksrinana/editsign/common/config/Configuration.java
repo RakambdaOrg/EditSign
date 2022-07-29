@@ -43,7 +43,7 @@ public class Configuration{
 			ConfigLoader.saveConfig(this, path);
 		}
 		catch(IOException e){
-			log.error("Failed to saved EditSign configuration to {}", path, e);
+			log.error("Failed to save EditSign configuration to {}", path, e);
 		}
 	}
 	
