@@ -32,7 +32,7 @@ public class Configuration{
 			return ConfigLoader.loadConfig(new Configuration(), Configuration.class, path);
 		}
 		catch(IOException e){
-			log.error("Failed to get FallingTree configuration from {}, using default", path, e);
+			log.error("Failed to get EditSign configuration from {}, using default", path, e);
 			return new Configuration();
 		}
 	}
@@ -43,7 +43,7 @@ public class Configuration{
 			ConfigLoader.saveConfig(this, path);
 		}
 		catch(IOException e){
-			log.error("Failed to saved FallingTree configuration to {}", path, e);
+			log.error("Failed to saved EditSign configuration to {}", path, e);
 		}
 	}
 	

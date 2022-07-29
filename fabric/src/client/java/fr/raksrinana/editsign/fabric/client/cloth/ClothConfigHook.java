@@ -26,7 +26,7 @@ public class ClothConfigHook extends ClothHookBase{
 		return (screen) -> {
 			var builder = ConfigBuilder.create()
 					.setParentScreen(screen)
-					.setTitle(MutableComponent.create(new LiteralContents("FallingTree")));
+					.setTitle(MutableComponent.create(new LiteralContents("EditSign")));
 			
 			var configuration = getMod().getConfiguration();
 			builder.setSavingRunnable(configuration::onUpdate);
@@ -47,7 +47,7 @@ public class ClothConfigHook extends ClothHookBase{
 				.setErrorSupplier(map(getMinecraftItemIdCellError()))
 				.build();
 		
-		var general = builder.getOrCreateCategory(translatable("text.autoconfig.fallingtree.category.default"));
+		var general = builder.getOrCreateCategory(translatable("text.autoconfig.editsign.category.default"));
 		general.addEntry(requiredItemEntry);
 	}
 	
