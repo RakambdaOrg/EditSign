@@ -35,6 +35,14 @@
     "java": ">=17"
   },
   "suggests": {
-    "modmenu": "*"
+    "modmenu": "*",
+    "cloth-config": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/uXWsRftdy7"
+      }
+    }
   }
 }
