@@ -53,7 +53,7 @@ allprojects {
 }
 
 def minecraftVersion = libs.versions.minecraftVersion.get()
-group = "fr.raksrinana"
+group = "fr.rakambda"
 archivesBaseName = "${project.modName}-${minecraftVersion}"
 
 def relType = "release"

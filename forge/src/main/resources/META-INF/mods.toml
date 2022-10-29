@@ -9,7 +9,7 @@ version="${version}"
 displayName = "${modName}"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
-authors = "RakSrinaNa"
+authors = "Rakambda"
 description = '''Allow you to edit signs without breaking them.'''
 
 [[dependencies.editsign]]
