@@ -1,6 +1,6 @@
 # Changelog
 
-For newer releases see the [releases section](https://github.com/RakSrinaNa/EditSign/releases).
+For newer releases see the [releases section](https://github.com/Rakambda/EditSign/releases).
 
 ## [1.17.1-2.2.3] - 2021-08-08
 ### Changed
