@@ -42,7 +42,7 @@ public class ClothConfigHook extends ClothHookBase{
 		var requiredItemEntry = builder.entryBuilder()
 				.startStrField(translatable(getFieldName(null, "requiredItemId")), config.getRequiredItemId())
 				.setDefaultValue("")
-				.setTooltip(getTooltips(null, "requiredItemId", 2))
+				.setTooltip(getTooltips(null, "requiredItemId", 4))
 				.setSaveConsumer(config::setRequiredItemId)
 				.setErrorSupplier(map(getMinecraftItemIdCellError()))
 				.build();
