@@ -2,21 +2,23 @@ package fr.rakambda.editsign.forge;
 
 import fr.rakambda.editsign.forge.config.Config;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.empty;
-import static net.minecraftforge.registries.ForgeRegistries.ITEMS;
 
 public class EditSignUtils{
 	public static boolean canPlayerEdit(Player player, ItemStack itemStack){
@@ -55,10 +57,10 @@ public class EditSignUtils{
 			}
 			var resourceLocation = new ResourceLocation(name);
 			if(isTag){
-				var tag = TagKey.create(Registry.ITEM_REGISTRY, resourceLocation);
-				return getRegistryTagContent(Registry.ITEM, tag);
+				var tag = TagKey.create(Registries.ITEM, resourceLocation);
+				return getRegistryTagContent(ForgeRegistries.ITEMS, tag);
 			}
-			return Stream.of(ITEMS.getValue(resourceLocation));
+			return getRegistryElement(ForgeRegistries.ITEMS, resourceLocation).stream();
 		}
 		catch(Exception e){
 			return empty();
@@ -66,8 +68,12 @@ public class EditSignUtils{
 	}
 	
 	@NotNull
-	private static <T> Stream<T> getRegistryTagContent(@NotNull Registry<T> registry, @NotNull TagKey<T> tag){
-		return registry.getTag(tag).stream()
-				.flatMap(a -> a.stream().map(Holder::value));
+	private static <T> Optional<T> getRegistryElement(IForgeRegistry<T> registryKey, ResourceLocation identifier){
+		return registryKey.getHolder(identifier).map(Holder::value);
+	}
+	
+	@NotNull
+	private static <T> Stream<T> getRegistryTagContent(@NotNull IForgeRegistry<T> registry, @NotNull TagKey<T> tag){
+		return registry.tags().getTag(tag).stream();
 	}
 }
