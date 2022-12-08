@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         mavenCentral()
@@ -53,7 +55,7 @@ allprojects {
 }
 
 def minecraftVersion = libs.versions.minecraftVersion.get()
-group = "fr.raksrinana"
+group = "fr.rakambda"
 archivesBaseName = "${project.modName}-${minecraftVersion}"
 
 def relType = "release"
@@ -98,46 +100,61 @@ task buildJar(type: Jar, group: "modding") {
     manifest {
         attributes([
                 "Specification-Title"     : project.modId,
-                "Specification-Vendor"    : "RakSrinaNa",
+                "Specification-Vendor"    : "Rakambda",
                 "Specification-Version"   : project.version,
                 "Implementation-Title"    : project.modName,
                 "Implementation-Version"  : "${project.version}",
-                "Implementation-Vendor"   : "RakSrinaNa",
+                "Implementation-Vendor"   : "Rakambda",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 assemble.finalizedBy("buildJar")
 
+static def extractMainVersion(String ver) {
+    def match = Pattern.compile("(\\d+\\.\\d+)(\\.\\d+)?").matcher(ver)
+    if (match.matches()) {
+        return match.group(1)
+    }
+    return null;
+}
+
 curseforge {
     apiKey = "${project.findProperty("curseforgeApiKey")}"
-    if (!isAlpha) {
-        project {
-            id = "${project.curseforge_project_id}"
-            changelogType = "markdown"
-            addGameVersion(minecraftVersion)
-            addGameVersion("Java 17")
-            if (project.includeFabric.toBoolean()) {
-                addGameVersion("Fabric")
-            }
-            if (project.includeForge.toBoolean()) {
-                addGameVersion("Forge")
-            }
-            changelog = project.findProperty("changelog") ?: "No changelog provided"
-            releaseType = relType
-            mainArtifact(jar) {
-                displayName = "${minecraftVersion}-${project.version}"
-            }
-            relations {
-                if (project.includeFabric.toBoolean()) {
-                    optionalDependency("fabric-api") //It's actually required
-                    optionalDependency("modmenu")
-                    optionalDependency("cloth-config")
-                }
+    project {
+        id = "${project.curseforge_project_id}"
+        changelogType = "markdown"
 
-                if (project.includeForge.toBoolean()) {
-                    optionalDependency("cloth-config")
-                }
+        if (isAlpha) {
+            def extracted = extractMainVersion(minecraftVersion)
+            if (extracted != null) {
+                addGameVersion(extracted + "-Snapshot")
+            }
+        } else {
+            addGameVersion(minecraftVersion)
+        }
+
+        addGameVersion("Java 17")
+        if (project.includeFabric.toBoolean()) {
+            addGameVersion("Fabric")
+        }
+        if (project.includeForge.toBoolean()) {
+            addGameVersion("Forge")
+        }
+        changelog = project.findProperty("changelog") ?: "No changelog provided"
+        releaseType = relType
+        mainArtifact(jar) {
+            displayName = "${minecraftVersion}-${project.version}"
+        }
+        relations {
+            if (project.includeFabric.toBoolean()) {
+                optionalDependency("fabric-api") //It's actually required
+                optionalDependency("modmenu")
+                optionalDependency("cloth-config")
+            }
+
+            if (project.includeForge.toBoolean()) {
+                optionalDependency("cloth-config")
             }
         }
     }
@@ -147,9 +164,7 @@ curseforge {
         forgeGradleIntegration = false
     }
     afterEvaluate {
-        if(!isAlpha){
-            tasks["curseforge${project.curseforge_project_id}"].dependsOn("buildJar")
-        }
+        tasks["curseforge${project.curseforge_project_id}"].dependsOn("buildJar")
     }
 }
 

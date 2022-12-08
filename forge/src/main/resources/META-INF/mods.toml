@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[44,)"
 issueTrackerURL = "https://github.com/${repoUser}/${repoName}/issues"
 license = "LGPL-3.0"
 
@@ -9,13 +9,13 @@ version="${version}"
 displayName = "${modName}"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/edit-sign"
 logoFile="logo.png"
-authors = "RakSrinaNa"
+authors = "Rakambda"
 description = '''Allow you to edit signs without breaking them.'''
 
 [[dependencies.editsign]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[44,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.editsign]]
@@ -27,6 +27,6 @@ side = "BOTH"
 [[dependencies.editsign]]
 modId = "cloth-config"
 mandatory = false
-versionRange = "[8.0.0,)"
+versionRange = "[9.0.0,)"
 ordering = "NONE"
 side = "CLIENT"
