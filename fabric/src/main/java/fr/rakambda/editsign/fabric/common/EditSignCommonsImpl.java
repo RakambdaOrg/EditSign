@@ -7,11 +7,14 @@ import fr.rakambda.editsign.fabric.common.wrapper.ComponentWrapper;
 import fr.rakambda.editsign.fabric.common.wrapper.ItemWrapper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import java.util.stream.Stream;
 import static java.util.stream.Stream.empty;
 
@@ -32,14 +35,19 @@ public class EditSignCommonsImpl extends EditSignCommon{
 			}
 			var identifier = new ResourceLocation(name);
 			if(isTag){
-				var tag = TagKey.create(Registry.ITEM_REGISTRY, identifier);
-				return getRegistryTagContent(Registry.ITEM, tag).map(ItemWrapper::new);
+				var tag = TagKey.create(Registries.ITEM, identifier);
+				return getRegistryTagContent(BuiltInRegistries.ITEM, tag).map(ItemWrapper::new);
 			}
-			return Stream.of(Registry.ITEM.get(identifier)).map(ItemWrapper::new);
+			return getRegistryElement(BuiltInRegistries.ITEM, identifier).stream().map(ItemWrapper::new);
 		}
 		catch(Exception e){
 			return empty();
 		}
+	}
+	
+	@NotNull
+	private <T> Optional<T> getRegistryElement(Registry<T> registryKey, ResourceLocation identifier){
+		return registryKey.getOptional(identifier);
 	}
 	
 	@NotNull
