@@ -3,3 +3,8 @@
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/editsign?logo=Modrinth)](https://modrinth.com/mod/editsign)
 
 Allow you to edit signs without destroying them. Simply right click the sign to edit it. If you don't want to edit, sneak while doing your thing.
+
+---
+
+* For Fabric users, **Fabric API** is required.
+* For Forge users, **Cloth Config API** is optional on the client and allows you to have a config GUI in game.
