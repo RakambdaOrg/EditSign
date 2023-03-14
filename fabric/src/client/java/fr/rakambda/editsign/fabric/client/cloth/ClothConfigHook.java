@@ -44,9 +44,16 @@ public class ClothConfigHook extends ClothHookBase{
 				.setSaveConsumer(config::setRequiredItemId)
 				.setErrorSupplier(map(getMinecraftItemIdCellError()))
 				.build();
+		var openGuiOnPlaceEntry = builder.entryBuilder()
+				.startBooleanToggle(translatable(getFieldName(null, "openGuiOnPlace")), config.isOpenGuiOnPlace())
+				.setDefaultValue(true)
+				.setTooltip(getTooltips(null, "openGuiOnPlace", 3))
+				.setSaveConsumer(config::setOpenGuiOnPlace)
+				.build();
 		
 		var general = builder.getOrCreateCategory(translatable("text.autoconfig.editsign.category.default"));
 		general.addEntry(requiredItemEntry);
+		general.addEntry(openGuiOnPlaceEntry);
 	}
 	
 	@NotNull

@@ -4,7 +4,8 @@
   "package": "fr.rakambda.editsign.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "SignBlockEntityMixin"
+    "SignBlockEntityMixin",
+    "SignItemMixin"
   ],
   "client": [],
   "server": [],

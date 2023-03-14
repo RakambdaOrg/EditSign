@@ -7,5 +7,9 @@
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[1]": "to be holding in order to edit",
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[2]": "a sign. If no value is set",
   "text.autoconfig.editsign.option.requiredItemId.@Tooltip[3]": "any item will be fine.",
+  "text.autoconfig.editsign.option.openGuiOnPlace": "Open GUI on place",
+  "text.autoconfig.editsign.option.openGuiOnPlace.@Tooltip[0]": "If set to false, sign",
+  "text.autoconfig.editsign.option.openGuiOnPlace.@Tooltip[1]": "GUI won't be opened",
+  "text.autoconfig.editsign.option.openGuiOnPlace.@Tooltip[2]": "when first placed",
   "editsign.action.not_editable": "This sign isn't editable"
 }

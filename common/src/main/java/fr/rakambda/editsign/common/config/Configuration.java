@@ -21,6 +21,9 @@ public class Configuration{
 	@Expose
 	@Getter
 	public String requiredItemId = "";
+	@Expose
+	@Getter
+	public boolean openGuiOnPlace = true;
 	
 	public Collection<IItem> getRequiredItem(@NotNull EditSignCommon mod){
 		return mod.getAsItems(getRequiredItemId());

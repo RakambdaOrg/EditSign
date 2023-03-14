@@ -14,11 +14,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SignBlockEntity.class)
-public final class SignBlockEntityMixin{
+public abstract class SignBlockEntityMixin{
 	@Shadow
 	private boolean isEditable;
 	
-	@Inject(method = "executeClickCommands", at = @At("HEAD"))
+	@Inject(method = "executeClickCommands", at = @At("HEAD"), cancellable = true)
 	public void useOnBlock(ServerPlayer serverPlayer, CallbackInfoReturnable<Boolean> callback){
 		var itemStack = serverPlayer.getItemInHand(serverPlayer.getUsedItemHand());
 		var item = itemStack.getItem();
@@ -37,6 +37,7 @@ public final class SignBlockEntityMixin{
 			isEditable = true;
 			SignBlockEntity sign = (SignBlockEntity) (Object) this;
 			serverPlayer.openTextEdit(sign);
+			callback.setReturnValue(true);
 		}
 	}
 }
