@@ -1,4 +1,4 @@
-package fr.rakambda.editsign.fabric.common.wrapper;
+package fr.rakambda.editsign.forge.common.wrapper;
 
 import fr.rakambda.editsign.common.wrapper.IItem;
 import fr.rakambda.editsign.common.wrapper.IItemStack;

@@ -26,6 +26,16 @@ public abstract class EditSignCommon{
 	@NotNull
 	public abstract IComponent translate(@NotNull String key, Object... objects);
 	
+	public boolean playerHasSignModifier(@NotNull IPlayer player, @NotNull IHand hand){
+		var playerItem = player.getHandItem(hand);
+		
+		var isDye = playerItem.getItem().isDye();
+		var isGlowInkSack = playerItem.isGlowInk();
+		var isInkSack = playerItem.isInkSac();
+		
+		return isDye || isGlowInkSack || isInkSack;
+	}
+	
 	public boolean canPlayerEdit(@NotNull IPlayer player, @NotNull IHand hand){
 		var requiredItem = configuration.getRequiredItem(this);
 		if(!requiredItem.isEmpty()){

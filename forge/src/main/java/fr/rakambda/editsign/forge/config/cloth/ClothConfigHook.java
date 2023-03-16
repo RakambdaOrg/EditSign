@@ -1,93 +1,76 @@
 package fr.rakambda.editsign.forge.config.cloth;
 
-import fr.rakambda.editsign.forge.config.CommonConfig;
-import fr.rakambda.editsign.forge.config.Config;
-import lombok.NoArgsConstructor;
+import fr.rakambda.editsign.common.EditSignCommon;
+import fr.rakambda.editsign.common.config.Configuration;
+import fr.rakambda.editsign.common.config.cloth.ClothHookBase;
+import fr.rakambda.editsign.common.wrapper.IComponent;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import org.jetbrains.annotations.NotNull;
-import java.util.LinkedList;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
-@NoArgsConstructor
-public class ClothConfigHook{
-	private static final Pattern MINECRAFT_ID_PATTERN = Pattern.compile("#?[a-z0-9_.-]+:[a-z0-9/._-]+");
-	
-	public static Function<String, Optional<Component>> getMinecraftItemIdCellError(){
-		return value -> {
-			boolean valid;
-			if(value == null || value.isEmpty()){
-				valid = true;
-			}
-			else{
-				valid = MINECRAFT_ID_PATTERN.matcher(value).matches();
-			}
-			
-			if(!valid){
-				return Optional.of(translatable("text.autoconfig.editsign.error.invalidItemResourceLocation"));
-			}
-			return Optional.empty();
-		};
+public class ClothConfigHook extends ClothHookBase{
+	public ClothConfigHook(@NotNull EditSignCommon mod){
+		super(mod);
 	}
 	
 	public void load(){
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> {
-			ConfigBuilder builder = ConfigBuilder.create()
+			var builder = ConfigBuilder.create()
 					.setParentScreen(screen)
 					.setTitle(Component.literal("EditSign"));
 			
-			fillConfigScreen(builder);
+			var configuration = getMod().getConfiguration();
+			builder.setSavingRunnable(configuration::onUpdate);
+			
+			fillConfigScreen(builder, configuration);
 			
 			return builder.build();
 		}));
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public void fillConfigScreen(ConfigBuilder builder){
-		CommonConfig config = Config.COMMON;
-		
-		StringListEntry reverseSneakingEntry = builder.entryBuilder()
-				.startStrField(translatable(getFieldName("requiredItemId")), config.getRequiredItemStr())
+	public void fillConfigScreen(@NotNull ConfigBuilder builder, @NotNull Configuration config){
+		var requiredItemEntry = builder.entryBuilder()
+				.startStrField(translatable(getFieldName(null, "requiredItemId")), config.getRequiredItemId())
 				.setDefaultValue("")
-				.setTooltip(getTooltips("requiredItemId", 4))
+				.setTooltip(getTooltips(null, "requiredItemId", 4))
 				.setSaveConsumer(config::setRequiredItemId)
-				.setErrorSupplier(getMinecraftItemIdCellError())
+				.setErrorSupplier(map(getMinecraftItemIdCellError()))
+				.build();
+		var openGuiOnPlaceEntry = builder.entryBuilder()
+				.startBooleanToggle(translatable(getFieldName(null, "openGuiOnPlace")), config.isOpenGuiOnPlace())
+				.setDefaultValue(true)
+				.setTooltip(getTooltips(null, "openGuiOnPlace", 3))
+				.setSaveConsumer(config::setOpenGuiOnPlace)
 				.build();
 		
-		ConfigCategory general = builder.getOrCreateCategory(translatable("text.autoconfig.editsign.category.default"));
-		general.addEntry(reverseSneakingEntry);
+		var general = builder.getOrCreateCategory(translatable("text.autoconfig.editsign.category.default"));
+		general.addEntry(requiredItemEntry);
+		general.addEntry(openGuiOnPlaceEntry);
 	}
 	
 	@NotNull
-	private static Component translatable(@NotNull String key){
-		return Component.translatable(key);
+	private Function<String, Optional<Component>> map(@NotNull Function<String, Optional<IComponent>> fct){
+		return str -> fct.apply(str).map(IComponent::getRaw).map(Component.class::cast);
 	}
 	
-	private String getFieldName(String fieldName){
-		return "text.autoconfig.editsign.option." + fieldName;
-	}
-	
-	private Component[] getTooltips(String fieldName, int count){
-		var tooltipKey = getFieldName(fieldName) + ".@Tooltip";
-		var keys = new LinkedList<String>();
-		if(count <= 1){
-			keys.add(tooltipKey);
-		}
-		else{
-			for(int i = 0; i < count; i++){
-				keys.add(tooltipKey + "[" + i + "]");
-			}
-		}
-		return keys.stream()
-				.map(ClothConfigHook::translatable)
+	@NotNull
+	protected Component[] getTooltips(@Nullable String category, @NotNull String fieldName, int count){
+		return getTooltipsInternal(category, fieldName, count)
+				.map(IComponent::getRaw)
+				.map(Component.class::cast)
 				.toArray(Component[]::new);
+	}
+	
+	@NotNull
+	private Component translatable(@NotNull String key){
+		return (Component) getMod().translate(key).getRaw();
 	}
 }
