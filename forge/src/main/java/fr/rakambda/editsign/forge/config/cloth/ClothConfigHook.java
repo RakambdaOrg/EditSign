@@ -45,7 +45,7 @@ public class ClothConfigHook{
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> {
 			ConfigBuilder builder = ConfigBuilder.create()
 					.setParentScreen(screen)
-					.setTitle(MutableComponent.create(new LiteralContents("EditSign")));
+					.setTitle(Component.literal("EditSign"));
 			
 			fillConfigScreen(builder);
 			

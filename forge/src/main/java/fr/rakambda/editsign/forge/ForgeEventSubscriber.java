@@ -1,7 +1,6 @@
 package fr.rakambda.editsign.forge;
 
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -29,7 +28,7 @@ public final class ForgeEventSubscriber{
 				}
 				else{
 					if(player instanceof ServerPlayer serverPlayer){
-						serverPlayer.sendSystemMessage(MutableComponent.create(new TranslatableContents(EditSign.MOD_ID + ".action.not_editable")), false);
+						serverPlayer.sendSystemMessage(Component.translatable(EditSign.MOD_ID + ".action.not_editable"), false);
 					}
 				}
 			}
