@@ -2,7 +2,7 @@ package fr.rakambda.editsign.forge;
 
 import fr.rakambda.editsign.common.EditSignCommon;
 import fr.rakambda.editsign.forge.common.EditSignCommonsImpl;
-import fr.rakambda.editsign.forge.config.cloth.ClothConfigHook;
+import fr.rakambda.editsign.forge.client.cloth.ClothConfigHook;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,7 +20,7 @@ public class EditSign{
 	public EditSign(){
 		if(ModList.get().isLoaded("cloth_config")){
 			try{
-				Class.forName("fr.rakambda.fallingtree.forge.client.cloth.ClothConfigHook")
+				Class.forName("fr.rakambda.editsign.forge.client.cloth.ClothConfigHook")
 						.asSubclass(ClothConfigHook.class)
 						.getConstructor(EditSignCommon.class)
 						.newInstance(mod)

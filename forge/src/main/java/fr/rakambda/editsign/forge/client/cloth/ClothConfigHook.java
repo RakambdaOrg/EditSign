@@ -1,4 +1,4 @@
-package fr.rakambda.editsign.forge.config.cloth;
+package fr.rakambda.editsign.forge.client.cloth;
 
 import fr.rakambda.editsign.common.EditSignCommon;
 import fr.rakambda.editsign.common.config.Configuration;
