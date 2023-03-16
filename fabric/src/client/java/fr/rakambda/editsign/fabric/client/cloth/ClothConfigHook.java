@@ -9,8 +9,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
@@ -26,7 +24,7 @@ public class ClothConfigHook extends ClothHookBase{
 		return (screen) -> {
 			var builder = ConfigBuilder.create()
 					.setParentScreen(screen)
-					.setTitle(MutableComponent.create(new LiteralContents("EditSign")));
+					.setTitle(Component.literal("EditSign"));
 			
 			var configuration = getMod().getConfiguration();
 			builder.setSavingRunnable(configuration::onUpdate);
