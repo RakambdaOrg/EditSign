@@ -7,9 +7,6 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -71,7 +68,7 @@ public class ClothConfigHook{
 	
 	@NotNull
 	private static Component translatable(@NotNull String key){
-		return MutableComponent.create(new TranslatableContents(key));
+		return Component.translatable(key);
 	}
 	
 	private String getFieldName(String fieldName){
