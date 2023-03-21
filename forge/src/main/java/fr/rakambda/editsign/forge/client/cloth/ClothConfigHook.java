@@ -1,14 +1,15 @@
-package fr.rakambda.editsign.fabric.client.cloth;
+package fr.rakambda.editsign.forge.client.cloth;
 
 import fr.rakambda.editsign.common.EditSignCommon;
 import fr.rakambda.editsign.common.config.Configuration;
 import fr.rakambda.editsign.common.config.cloth.ClothHookBase;
 import fr.rakambda.editsign.common.wrapper.IComponent;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.fml.ModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
@@ -19,9 +20,8 @@ public class ClothConfigHook extends ClothHookBase{
 		super(mod);
 	}
 	
-	@NotNull
-	public Function<Screen, Screen> load(){
-		return (screen) -> {
+	public void load(){
+		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> {
 			var builder = ConfigBuilder.create()
 					.setParentScreen(screen)
 					.setTitle(Component.literal("EditSign"));
@@ -32,10 +32,10 @@ public class ClothConfigHook extends ClothHookBase{
 			fillConfigScreen(builder, configuration);
 			
 			return builder.build();
-		};
+		}));
 	}
 	
-	@Environment(EnvType.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void fillConfigScreen(@NotNull ConfigBuilder builder, @NotNull Configuration config){
 		var requiredItemEntry = builder.entryBuilder()
 				.startStrField(translatable(getFieldName(null, "requiredItemId")), config.getRequiredItemId())

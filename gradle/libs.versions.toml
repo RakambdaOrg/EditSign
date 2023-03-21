@@ -21,6 +21,7 @@ forge-plugin-version = "5.1.70"
 curse-version = "1.4.0"
 modrinth-version = "2.7.5"
 names-version = "0.46.0"
+mixingradle-plugin-version = "0.7-SNAPSHOT"
 
 [libraries]
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok-version" }
@@ -44,3 +45,4 @@ modrinth = { id = "com.modrinth.minotaur", version.ref = "modrinth-version"}
 names = { id = "com.github.ben-manes.versions", version.ref = "names-version" }
 loom = { id = "fabric-loom", version.ref = "fabric-loom-version" }
 forge = { id = "net.minecraftforge.gradle", version.ref = "forge-plugin-version" }
+mixingradle = { id = "org.spongepowered.mixin", version.ref = "mixingradle-plugin-version" }

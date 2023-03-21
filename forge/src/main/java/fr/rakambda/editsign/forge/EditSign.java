@@ -1,33 +1,36 @@
 package fr.rakambda.editsign.forge;
 
-import fr.rakambda.editsign.forge.config.Config;
-import fr.rakambda.editsign.forge.config.cloth.ClothConfigHook;
-import net.minecraftforge.fml.IExtensionPoint.DisplayTest;
+import fr.rakambda.editsign.common.EditSignCommon;
+import fr.rakambda.editsign.forge.common.EditSignCommonsImpl;
+import fr.rakambda.editsign.forge.client.cloth.ClothConfigHook;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.network.NetworkConstants;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.lang.reflect.InvocationTargetException;
 
+@Log4j2
 @Mod(EditSign.MOD_ID)
 public class EditSign{
 	public static final String MOD_ID = "editsign";
-	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+	@Getter
+	private static final EditSignCommonsImpl mod = new EditSignCommonsImpl();
 	
-	public EditSign() throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException{
-		ModLoadingContext.get().registerExtensionPoint(DisplayTest.class, () -> new DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
-		
-		if(ModList.get().isLoaded("cloth_config"))
-		{
-			Class.forName("fr.rakambda.editsign.forge.config.cloth.ClothConfigHook")
-					.asSubclass(ClothConfigHook.class)
-					.getConstructor()
-					.newInstance()
-					.load();
+	public EditSign(){
+		if(ModList.get().isLoaded("cloth_config")){
+			try{
+				Class.forName("fr.rakambda.editsign.forge.client.cloth.ClothConfigHook")
+						.asSubclass(ClothConfigHook.class)
+						.getConstructor(EditSignCommon.class)
+						.newInstance(mod)
+						.load();
+			}
+			catch(ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e){
+				log.error("Failed to hook into ClothConfig", e);
+			}
 		}
+		
+		mod.registerForge(MinecraftForge.EVENT_BUS);
 	}
 }

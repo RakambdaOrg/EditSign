@@ -1,117 +1,125 @@
 import net.minecraftforge.gradle.common.tasks.SignJar
 
 plugins {
-    alias(libs.plugins.forge)
+	alias(libs.plugins.forge)
+	alias(libs.plugins.mixingradle)
 }
 
 minecraft {
-    mappings channel: "official", version: "${libs.versions.forgeMappingsVersion.get()}"
-    runs {
-        client {
-            taskName "runESForgeClient"
-            workingDirectory project.file("./run/client")
-            property "forge.logging.markers", "REGISTRIES"
-            property "forge.logging.console.level", "debug"
-            property "forge.enabledGameTestNamespaces", "editsign"
-            mods {
-                editsign {
-                    source sourceSets.main
-                }
-            }
-        }
+	mappings channel: "official", version: "${libs.versions.forgeMappingsVersion.get()}"
+	runs {
+		client {
+			taskName "runESForgeClient"
+			workingDirectory project.file("./run/client")
+			property "forge.logging.markers", "REGISTRIES"
+			property "forge.logging.console.level", "debug"
+			property "forge.enabledGameTestNamespaces", "editsign"
+			mods {
+				editsign {
+					source sourceSets.main
+				}
+			}
+		}
 
-        server {
-            taskName "runESForgeServer"
-            workingDirectory project.file("./run/server")
-            property "forge.logging.markers", "REGISTRIES"
-            property "forge.logging.console.level", "debug"
-            property "forge.enabledGameTestNamespaces", "editsign"
-            mods {
-                editsign {
-                    source sourceSets.main
-                }
-            }
-        }
+		server {
+			taskName "runESForgeServer"
+			workingDirectory project.file("./run/server")
+			property "forge.logging.markers", "REGISTRIES"
+			property "forge.logging.console.level", "debug"
+			property "forge.enabledGameTestNamespaces", "editsign"
+			mods {
+				editsign {
+					source sourceSets.main
+				}
+			}
+		}
 
-        gameTestServer {
-            taskName "runESForgeTestServer"
-            workingDirectory project.file("./run/test")
-            property "forge.logging.markers", "REGISTRIES"
-            property "forge.logging.console.level", "debug"
-            property "forge.enabledGameTestNamespaces", "editsign"
+		gameTestServer {
+			taskName "runESForgeTestServer"
+			workingDirectory project.file("./run/test")
+			property "forge.logging.markers", "REGISTRIES"
+			property "forge.logging.console.level", "debug"
+			property "forge.enabledGameTestNamespaces", "editsign"
 
-            mods {
-                editsign {
-                    source sourceSets.main
-                }
-            }
-        }
+			mods {
+				editsign {
+					source sourceSets.main
+				}
+			}
+		}
 
-        data {
-            taskName "runESForgeData"
-            workingDirectory project.file("./run/data")
-            property "forge.logging.markers", "REGISTRIES"
-            property "forge.logging.console.level", "debug"
-            args '--mod', 'editsign', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+		data {
+			taskName "runESForgeData"
+			workingDirectory project.file("./run/data")
+			property "forge.logging.markers", "REGISTRIES"
+			property "forge.logging.console.level", "debug"
+			args '--mod', 'editsign', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
-            mods {
-                editsign {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+			mods {
+				editsign {
+					source sourceSets.main
+				}
+			}
+		}
+	}
+}
+
+tasks {
+	mixin {
+		add(sourceSets.main, "forge.${modId}.refmap.json")
+		config("editsign.mixins.json")
+	}
 }
 
 configurations {
-    library
-    implementation.extendsFrom library
+	library
+	implementation.extendsFrom library
 }
 
 minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
+	lazyToken('minecraft_classpath') {
+		configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+	}
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft(libs.forge)
-    library(project(":common"))
+	minecraft(libs.forge)
+	library(project(":common"))
 
-    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${libs.versions.clothConfigVersion.get()}"))
+	implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${libs.versions.clothConfigVersion.get()}"))
 }
 
 processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-    from "src/main/resources", "../common/src/main/resources"
+	from "src/main/resources", "../common/src/main/resources"
 
-    filesMatching("META-INF/mods.toml") {
-        expand project.properties
-    }
+	filesMatching("META-INF/mods.toml") {
+		expand project.properties
+	}
 }
 
 ext {
-    minecraftVersion = libs.versions.minecraftVersion.get()
+	minecraftVersion = libs.versions.minecraftVersion.get()
 }
 
 jar.finalizedBy("reobfJar")
 
 task signJar(type: SignJar, dependsOn: rootProject.buildJar, group: "modding") {
-    onlyIf {
-        project.hasProperty("forgeKeyStore")
-                && project.hasProperty("forgeKeyStoreAlias")
-                && project.hasProperty("forgeKeyStorePass")
-                && project.hasProperty("forgeKeyStoreKeyPass")
-                && rootProject.file(project.findProperty("forgeKeyStore")).exists()
-    }
+	onlyIf {
+		project.hasProperty("forgeKeyStore")
+				&& project.hasProperty("forgeKeyStoreAlias")
+				&& project.hasProperty("forgeKeyStorePass")
+				&& project.hasProperty("forgeKeyStoreKeyPass")
+				&& rootProject.file(project.findProperty("forgeKeyStore")).exists()
+	}
 
-    keyStore = project.findProperty("forgeKeyStore") == null ? null : rootProject.file(project.findProperty("forgeKeyStore")).absolutePath
-    alias = project.findProperty("forgeKeyStoreAlias")
-    storePass = project.findProperty("forgeKeyStorePass")
-    keyPass = project.findProperty("forgeKeyStoreKeyPass")
-    inputFile = rootProject.jar.getArchiveFile()
-    outputFile = rootProject.jar.getArchiveFile()
+	keyStore = project.findProperty("forgeKeyStore") == null ? null : rootProject.file(project.findProperty("forgeKeyStore")).absolutePath
+	alias = project.findProperty("forgeKeyStoreAlias")
+	storePass = project.findProperty("forgeKeyStorePass")
+	keyPass = project.findProperty("forgeKeyStoreKeyPass")
+	inputFile = rootProject.jar.getArchiveFile()
+	outputFile = rootProject.jar.getArchiveFile()
 }
