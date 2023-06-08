@@ -4,6 +4,8 @@
 
 Allow you to edit signs without destroying them. Simply right click the sign to edit it. If you don't want to edit, sneak while doing your thing.
 
+**Project discontinued starting Minecraft 1.20 as it's in Minecraft by default**
+
 ---
 
 * For Fabric users, **Fabric API** is required.
