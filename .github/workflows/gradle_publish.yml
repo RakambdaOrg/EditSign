@@ -32,7 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Build mod file
-        uses: gradle/gradle-build-action@v2.6.1
+        uses: gradle/gradle-build-action@v2.7.0
         with:
           cache-disabled: true
           arguments: |
@@ -47,7 +47,7 @@ jobs:
             -PforgeSignSHA1=f927f4701bf4c0620c7bd0a501ce278f5e5ecc62
 
       - name: Push on stores
-        uses: gradle/gradle-build-action@v2.6.1
+        uses: gradle/gradle-build-action@v2.7.0
         with:
           cache-disabled: true
           arguments: |
